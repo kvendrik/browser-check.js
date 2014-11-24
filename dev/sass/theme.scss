@@ -1,0 +1,25 @@
+* {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+html,body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font: $body-weight $size-m $body-family;
+    color: $base-color;
+    line-height: $body-line-height;
+    background-color: $white;
+    @include border(top, $accent, $border-style-alt);
+}
+
+.container {
+    width: $main-container-width;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+}

@@ -1,0 +1,53 @@
+$main-container-width: 600px;
+$wide-container-width: 800px;
+
+//Colors
+$white: #f5f5f5;
+$base-color: #303b45;
+
+$accent: #177edf;
+
+$grey: #c4cfd9;
+$grey-light: #ebeef1;
+
+$red: #c84e30;
+$yellow: #e7ba00;
+$green: #2fbd29;
+
+$opera-red: #cc0f16;
+
+
+//Typography
+$body-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+$body-weight: 300;
+$body-line-height: 1.5em;
+
+$heading-line-height: 1.3em;
+$heading-weight: 300;
+
+$code-family: 'Meslo LG L DZ';
+
+$body-weight-bold: 400;
+
+$size-s: 0.9em;
+$size-m: 18px;
+
+
+//SPACING
+$margin-s: 8px;
+$margin-m: 20px;
+$margin-l: 40px;
+$margin-xl: 60px;
+
+$padding-s: $margin-s $margin-s+5;
+$padding-m: $margin-m $margin-m+5;
+
+//BORDERS
+$border-style: dashed;
+$border-style-alt: solid;
+$border-width: 1px;
+
+
+//ANIMATIONS
+$transition-duration: .3s;
+$transition-timing: ease;

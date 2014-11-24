@@ -1,0 +1,111 @@
+include inc/header.jade
+
+.container
+
+  header#header
+    h1 browser-check
+      span .js
+
+  :markdown
+    He as compliment unreserved projecting. Between had observe pretend delight for believe.
+    Do newspaper questions consulted sweetness do. Our sportsman his unwilling fulfilled departure law.
+    Now world own total saved **above her** cause table. Wicket myself her square remark the should far secure sex.
+    Smiling cousins warrant law explain for whether. I aim to support:
+
+    I aim to support:
+
+  section.selects-wrapper
+    select
+      option(checked) Internet Explorer 8+
+      option Internet Explorer 9+
+      option Internet Explorer 10+
+      option Internet Explorer 11+
+    span.ss-icon.ss-standard navigatedown
+    select
+      option(checked) Chrome 16+
+    span.ss-icon.ss-standard navigatedown
+    select
+      option(checked) Firefox 22+
+    span.ss-icon.ss-standard navigatedown
+    select
+      option(checked) Opera 22+
+    span.ss-icon.ss-standard navigatedown
+    br
+    select
+      option(checked) Safari 5.1+
+    span.ss-icon.ss-standard navigatedown
+    select
+      option(checked) iOS 6.0+
+    span.ss-icon.ss-standard navigatedown
+    select
+      option(checked) Android 2.3+
+    span.ss-icon.ss-standard navigatedown
+
+    section.pop-up
+      header.
+        IE8 and Android 2.2 do not
+        support the addEventListener
+        method
+      .content
+        p.
+          Method of adding event
+          listeners to DOM elements
+        section.support-overview
+          ul
+            li IE
+            li.n 8
+            li.a 9
+            li.y 10
+            li.y 11
+          ul
+            li Firefox
+            li.n 8
+            li.a 9
+            li.y 10
+            li.y 11
+          ul
+            li Chrome
+            li.n 16
+            li.a 18
+            li.y 22
+            li.y 30
+          ul
+            li Safari
+            li.a 5.0
+            li.y 5.1
+
+pre.code-wrapper
+  .container.
+    (function(){
+      this.FastButton = function(element, handler){
+          this.element = element;
+          this.handler = handler;
+
+          if("ontouchstart" in window){
+              element.addEventListener('touchstart', this, false);
+          } else {
+              element.<a href="#" class="error">addEventListener</a>('click', this, false);
+          }
+      };
+
+      this.FastButton.prototype.handleEvent = function(e){
+        switch(e.type){
+          case 'touchstart' : this.onTouchStart(e); break;
+          case 'touchmove' : this.onTouchMove(e); break;
+          case 'touchend' : this.onClick(e); break;
+          case 'click' : this.onClick(e); break;
+        }
+      };
+
+      this.FastButton.prototype.onTouchStart = function(e){
+        e.stopPropagation();
+
+        this.element.addEventListener('touchend', this, false);
+        this.element.addEventListener('touchmove', this, false);
+
+        this.startX = e.touches[0].clientX;
+        this.startY = e.touches[0].clientY;
+
+    };
+
+include inc/footer.jade

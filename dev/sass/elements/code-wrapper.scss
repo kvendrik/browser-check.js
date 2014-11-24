@@ -1,0 +1,32 @@
+.code-wrapper {
+    width: 100%;
+
+    @include border(top, $grey, $border-style-alt);
+    background: $grey-light;
+
+    padding: $margin-l 0;
+
+    .container {
+        width: $wide-container-width;
+
+        &:focus {
+            outline: none;
+        }
+
+        a {
+            cursor: pointer;
+            &.error,&.error:hover {
+                color: $red;
+                border-color: $red;
+            }
+            &.warning,&.warning:hover {
+                color: $yellow;
+                border-color: $yellow;
+            }
+            &.pass,&.pass:hover {
+                color: $green;
+                border-color: $green;
+            }
+        }
+    }
+}

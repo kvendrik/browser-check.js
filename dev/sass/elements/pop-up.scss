@@ -1,0 +1,75 @@
+.pop-up {
+    font-size: $size-s;
+
+    position: absolute;
+    top: $margin-l;
+    left: 0;
+
+    width: 270px;
+    background-color: $grey-light;
+    @include border(false, $grey, $border-style-alt);
+
+    box-shadow: 3px 3px 10px 0 darken($grey,10%);
+
+    &:after {
+        content: '';
+        width: 0;
+        height: 0;
+
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 10px solid $grey;
+
+        margin-left: -5px;
+
+        position: absolute;
+        left: 50%;
+        bottom: -10px;
+    }
+
+    header {
+        width: 100%;
+        padding: $padding-m;
+        background-color: $red;
+        color: $white;
+    }
+
+    .content {
+        padding: $padding-m;
+
+        .support-overview {
+            ul {
+                width: 100%;
+                overflow: hidden;
+                margin-bottom: 1px;
+
+                li {
+                    display: block;
+                    float: left;
+                    padding: 5px 7px;
+
+                    line-height: 1em;
+                    margin-right: 1px;
+
+                    background-color: #c4cfd9;
+
+                    &.n,&.y,&.a {
+                        color: #fff;
+                    }
+
+                    &.n {
+                        background-color: $red;
+                    }
+
+                    &.a {
+                        background-color: $yellow;
+                    }
+
+                    &.y {
+                        background-color: $green;
+                    }
+                }
+            }
+        }
+    }
+}

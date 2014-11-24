@@ -1,0 +1,81 @@
+h1,h2,h3,h4,h5,h6,p,pre,ul,ol {
+    margin: 0;
+    padding: 0;
+}
+
+h1,h2,h3,h4,h5,h6,p {
+    margin-bottom: $margin-m;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-weight: $heading-weight;
+    line-height: $heading-line-height;
+}
+
+h1 {
+    font-size: 2.6em;
+}
+h2 {
+    font-size: 2.2em;
+}
+h3 {
+    font-size: 1.8em;
+}
+h4 {
+    font-size: 1.4em;
+}
+h5 {
+    font-size: 1.2em;
+}
+h6 {
+    font-size: 1.1em;
+}
+
+b {
+    font-weight: $body-weight-bold;
+}
+
+u {
+    text-decoration: none;
+    @include border(bottom);
+}
+
+small {
+    font-size: $size-s;
+}
+
+a {
+    color: $base-color;
+    text-decoration: none;
+    @include border(bottom);
+
+    &:hover {
+        color: $accent;
+        border-color: $accent;
+    }
+}
+
+select {
+    font: $body-weight-bold $size-s $body-family;
+    color: $base-color;
+    background: transparent;
+    cursor: pointer;
+
+    border-radius: 0;
+    border: none;
+
+    -webkit-appearance: none;
+    padding-right: $margin-m;
+
+    &:focus {
+        outline: none;
+    }
+
+    &+span {
+        font-size: .5em;
+        margin-left: -15px;
+        position: relative;
+        z-index: -1;
+        top: -1px;
+    }
+}

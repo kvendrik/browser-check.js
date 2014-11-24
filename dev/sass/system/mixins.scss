@@ -1,0 +1,18 @@
+//Border
+@mixin border($side:false, $color:$grey, $border-style:$border-style){
+  @if $side {
+    border-#{$side}: $border-style $border-width $color;
+  } @else {
+    border: $border-style $border-width $color;
+  }
+}
+
+//Transition
+@mixin transition($property, $duration:$transition-duration, $timing:$transition-timing, $delay:0s){
+  transition: $property $duration $timing $delay;
+}
+
+//Animations
+@mixin animation($name, $seconds:$transition-duration, $delay:0s){
+  animation: $name $seconds infinite alternate $delay;
+}
