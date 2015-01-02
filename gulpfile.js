@@ -120,7 +120,7 @@ gulp.task('sass', function() {
 
 // Scripts
 gulp.task('scripts', function() {
-  return gulp.src(path.script.src)
+  return gulp.src([path.script.src+'libs/**/*.js', path.script.src+'src/**/*.js', files.script.src])
     .pipe(concat('main.js'))
     .pipe(gulp.dest(path.script.dest))
     .pipe(rename({ suffix: '.min' }))
@@ -131,25 +131,8 @@ gulp.task('scripts', function() {
 });
 
 gulp.task('jshint', function(){
-  return gulp.src('dev/js/_init.js')
-    .pipe(jshint({
-      browser: true, //Web Browser (window, document, etc)
-      strict: true, //Requires all functions run in ES5 Strict Mode
-      unused: true, //Require all defined variables be used
-      undef: true, //Require all non-global variables to be declared (prevents global leaks)
-      quotmark: 'single', //Quotation mark consistency
-      camelcase: true, //Identifiers must be in camelCase
-      eqeqeq: true, //Require triple equals (===) for comparison
-      forin: true, //Require filtering for..in loops with obj.hasOwnProperty()
-      immed: true, //Require immediate invocations to be wrapped in parens e.g. `(function () { } ());`
-      indent: 4, //Number of spaces to use for indentation
-      latedef: true, //Require variables/functions to be defined before being used
-      newcap: true, //Require capitalization of all constructor functions e.g. `new F()`
-      noarg: true, //Prohibit use of `arguments.caller` and `arguments.callee`
-      noempty: true, //Prohibit use of empty blocks
-      maxparams: 3, //Max number of formal params allowed per function
-      maxdepth: 4 //Max depth of nested blocks (within functions)
-    }))
+  return gulp.src(files.script.src)
+    .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter('default'))
     .pipe(notify({ title: 'JSHint Done', message: 'Checked JS with JSHint ✔' }));
 });
@@ -171,7 +154,7 @@ gulp.task('watch', function() {
   // Watch .SCSS
   gulp.watch(files.style.src, ['sass'])
   // Watch .JS
-  gulp.watch(files.script.src, ['scripts'])
+  gulp.watch(files.script.src, ['jshint', 'scripts'])
   // Watch Images
   gulp.watch(files.image.src, ['imagemin'])
 });
@@ -184,7 +167,7 @@ gulp.task('clean', function(cb) {
 });
 
 // Build
-gulp.task('build', ['sass', 'scripts'], function() {
+gulp.task('build', ['sass', 'jshint', 'scripts'], function() {
   gulp.start('jade', 'imagemin');
   gutil.log(gutil.colors.yellow('Building!'))
 });

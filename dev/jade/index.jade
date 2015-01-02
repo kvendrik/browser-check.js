@@ -14,65 +14,36 @@ include inc/header.jade
 
     I aim to support:
 
-  section.selects-wrapper
-    select
-      option(checked) Internet Explorer 8+
-      option Internet Explorer 9+
-      option Internet Explorer 10+
-      option Internet Explorer 11+
-    span.ss-icon.ss-standard navigatedown
-    select
-      option(checked) Chrome 16+
-    span.ss-icon.ss-standard navigatedown
-    select
-      option(checked) Firefox 22+
-    span.ss-icon.ss-standard navigatedown
-    select
-      option(checked) Opera 22+
-    span.ss-icon.ss-standard navigatedown
-    br
-    select
-      option(checked) Safari 5.1+
-    span.ss-icon.ss-standard navigatedown
-    select
-      option(checked) iOS 6.0+
-    span.ss-icon.ss-standard navigatedown
-    select
-      option(checked) Android 2.3+
-    span.ss-icon.ss-standard navigatedown
+  section.selects-wrapper#selects-wrapper
 
-    section.pop-up
-      header.
-        IE8 and Android 2.2 do not
-        support the addEventListener
-        method
-      .content
-        p.
-          Method of adding event
-          listeners to DOM elements
-        section.support-overview
-          ul
-            li IE
-            li.n 8
-            li.a 9
-            li.y 10
-            li.y 11
-          ul
-            li Firefox
-            li.n 8
-            li.a 9
-            li.y 10
-            li.y 11
-          ul
-            li Chrome
-            li.n 16
-            li.a 18
-            li.y 22
-            li.y 30
-          ul
-            li Safari
-            li.a 5.0
-            li.y 5.1
+  section.results-up
+    input.pass(type="radio", name="results-tab" checked)
+    input.warning(type="radio", name="results-tab")
+    input.error(type="radio", name="results-tab")
+
+    ul.header
+      li.ss-icon.pass check
+      li.ss-icon.warning alert
+      li.ss-icon.error delete
+    ul.tab.pass
+      li Element.getElementById
+      li Object.observe
+      li window.scrollTo
+    ul.tab.warning
+      li Element.addEventListener
+      li Object.observe
+    ul.tab.error
+      li Element.addEventListener
+      li Object.observe
+
+  section.tooltip#tooltip
+    header.
+      {{explaination}}
+    .content
+      p.description.
+        {{description}}
+      section.support-overview
+        {{supportOverview}}
 
 pre.code-wrapper
   .container.

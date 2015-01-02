@@ -1,0 +1,91 @@
+.results-up {
+    font-size: $size-s;
+
+    position: fixed;
+    right: $margin-l;
+    top: $margin-l;
+    z-index: 1;
+
+    width: 270px;
+
+    line-height: 0;
+
+    input[type="radio"]{
+        width: 40px;
+        height: 40px;
+        display: inline-block;
+
+        cursor: pointer;
+        -webkit-appearance: none;
+
+        margin: 0;
+
+        &:focus {
+            outline: none;
+        }
+
+        &.error:checked ~ ul.tab.error {
+            display: block;
+        }
+        &.warning:checked ~ ul.tab.warning {
+            display: block;
+        }
+        &.pass:checked ~ ul.tab.pass {
+            display: block;
+        }
+    }
+
+    ul {
+        margin: 0;
+        li {
+            color: $white;
+            line-height: $body-line-height;
+        }
+    }
+
+    ul,li {
+        &.error {
+            background-color: $red;
+            &.active,li.active {
+                background-color: $red-dark;
+            }
+        }
+        &.warning {
+            background-color: $yellow;
+            &.active,li.active {
+                background-color: $yellow-dark;
+            }
+        }
+        &.pass,li.active {
+            background-color: $green;
+            &.active {
+                background-color: $green-dark;
+            }
+        }
+    }
+
+    ul.header {
+        position: absolute;
+        top: 0;
+        z-index: -1;
+
+        li {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            line-height: 45px;
+            display: inline-block;
+
+            position: relative;
+        }
+    }
+
+    ul.tab {
+        display: none;
+        li {
+            display: block;
+            padding: $padding-s;
+        }
+    }
+
+}

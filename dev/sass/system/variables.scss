@@ -11,8 +11,11 @@ $grey: #c4cfd9;
 $grey-light: #ebeef1;
 
 $red: #c84e30;
+$red-dark: darken($red, 7%);
 $yellow: #e7ba00;
-$green: #2fbd29;
+$yellow-dark: darken($yellow, 2%);
+$green: darken(#2fbd29, 2%);
+$green-dark: darken($green, 2%);
 
 $opera-red: #cc0f16;
 

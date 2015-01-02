@@ -1,15 +1,14 @@
-.pop-up {
+.tooltip {
     font-size: $size-s;
 
     position: absolute;
     top: $margin-l;
-    left: 0;
+    left: $margin-l;
+    z-index: 2;
 
-    width: 270px;
+    width: 275px;
     background-color: $grey-light;
     @include border(false, $grey, $border-style-alt);
-
-    box-shadow: 3px 3px 10px 0 darken($grey,10%);
 
     &:after {
         content: '';
@@ -52,6 +51,7 @@
                     margin-right: 1px;
 
                     background-color: #c4cfd9;
+                    text-transform: capitalize;
 
                     &.n,&.y,&.a {
                         color: #fff;
