@@ -1,41 +1,32 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="user-scalable=no, initial-scale=1"><title>Browser-check.js - Quickly get an estimate of your JS browser support</title><link rel="stylesheet" href="css/main.css"><link rel="stylesheet" href="fonts/ss-standard/stylesheet.css"><link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,300italic,400italic" rel="stylesheet" type="text/css"></head><body><div class="container"><header id="header"><h1>browser-check<span>.js</span></h1></header><p>He as compliment unreserved projecting. Between had observe pretend delight for believe.
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="user-scalable=no, initial-scale=1"><title>Browser-check.js - Quickly get an estimate of your JS browser support</title><link rel="stylesheet" href="css/bundle.min.css"><link rel="stylesheet" href="fonts/ss-standard/stylesheet.css"><link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,300italic,400italic" rel="stylesheet" type="text/css"></head><body><div class="container"><header id="header"><h1>browser-check<span>.js</span></h1></header><p>He as compliment unreserved projecting. Between had observe pretend delight for believe.
 Do newspaper questions consulted sweetness do. Our sportsman his unwilling fulfilled departure law.
 Now world own total saved <strong>above her</strong> cause table. Wicket myself her square remark the should far secure sex.
 Smiling cousins warrant law explain for whether. I aim to support:</p>
 <p>I aim to support:</p>
-<section id="selects-wrapper" class="selects-wrapper"></section><section class="results-up"><input type="radio" name="results-tab" checked class="pass"><input type="radio" name="results-tab" class="warning"><input type="radio" name="results-tab" class="error"><ul class="header"><li class="ss-icon pass">check</li><li class="ss-icon warning">alert</li><li class="ss-icon error">delete</li></ul><ul class="tab pass"><li>Element.getElementById</li><li>Object.observe</li><li>window.scrollTo</li></ul><ul class="tab warning"><li>Element.addEventListener</li><li>Object.observe</li></ul><ul class="tab error"><li>Element.addEventListener</li><li>Object.observe</li></ul></section><section id="tooltip" class="tooltip"><header>IE8 and Android 2.2 do not
-support the addEventListener
-method</header><div class="content"><p class="description">Method of adding event
-listeners to DOM elements</p><section class="support-overview"></section></div></section></div><pre class="code-wrapper"><div class="container">(function(){
-  this.FastButton = function(element, handler){
-      this.element = element;
-      this.handler = handler;
+<section id="selects-wrapper" class="selects-wrapper"></section><section class="results-up"><input type="radio" name="results-tab" checked class="pass"><input type="radio" name="results-tab" class="warning"><input type="radio" name="results-tab" class="error"><ul class="header"><li class="ss-icon pass">check</li><li class="ss-icon warning">alert</li><li class="ss-icon error">delete</li></ul><ul class="tab pass"><li>Element.getElementById</li><li>Object.observe</li><li>window.scrollTo</li></ul><ul class="tab warning"><li>Element.addEventListener</li><li>Object.observe</li></ul><ul class="tab error"><li>Element.addEventListener</li><li>Object.observe</li></ul></section><section id="tooltip" class="tooltip"><header>{{explaination}}</header><div class="content"><p class="description">{{description}}</p><section class="support-overview">{{{supportOverview}}}</section><a href="{{link}}" target="_blank" class="overview-link">View full overview on caniuse.com</a></div></section></div><pre class="code-wrapper"><div id="code-input" contenteditable spellcheck="false" class="container">(function(){
+  window.addEventListener('devicelight', function(event) {
+    console.log(event.value);
+  });
 
-      if("ontouchstart" in window){
-          element.addEventListener('touchstart', this, false);
-      } else {
-          element.<a href="#" class="error">addEventListener</a>('click', this, false);
-      }
-  };
 
-  this.FastButton.prototype.handleEvent = function(e){
-    switch(e.type){
-      case 'touchstart' : this.onTouchStart(e); break;
-      case 'touchmove' : this.onTouchMove(e); break;
-      case 'touchend' : this.onClick(e); break;
-      case 'click' : this.onClick(e); break;
-    }
-  };
+  var encodedData = window.btoa("Hello, world"); // encode a string
+  var decodedData = window.atob(encodedData); // decode the string
 
-  this.FastButton.prototype.onTouchStart = function(e){
-    e.stopPropagation();
 
-    this.element.addEventListener('touchend', this, false);
-    this.element.addEventListener('touchmove', this, false);
+  var AudioContext = window.AudioContext || window.webkitAudioContext;
+  var audioCtx = new AudioContext();
 
-    this.startX = e.touches[0].clientX;
-    this.startY = e.touches[0].clientY;
+  var oscillatorNode = audioCtx.createOscillator();
+  var gainNode = audioCtx.createGain();
+  var finish = audioCtx.destination;
 
-};
-</div></pre><script type="text/javascript" src="js/main.js"></script></body>
+
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var text = reader.result;
+  }
+
+  reader.readAsText(file, encoding);
+}());
+</div></pre><script type="text/javascript" src="js/app.js"></script></body>
 </html>

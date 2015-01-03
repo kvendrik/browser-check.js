@@ -1,33 +1,41 @@
 (function(){
 'use strict';
 
-var UI = function(){
-
-    this.checkVersions = {
-        ie: 9,
-        chrome: 16,
-        firefox: 22,
-        safari: 5.1,
-        opera: 18,
-        ios_saf: 8,
-        android: 4.1
+var UI = function(checkVersions, tooltipEl){
+    this.checkVersions = checkVersions;
+    this.tooltip = {
+        el: tooltipEl,
+        childs: {
+            explaination: tooltipEl.getElementsByTagName('header')[0],
+            description: tooltipEl.getElementsByClassName('description')[0],
+            supportOverview: tooltipEl.getElementsByClassName('support-overview')[0],
+            overviewLink: tooltipEl.getElementsByClassName('overview-link')[0]
+        }
     };
-
 };
 
-UI.prototype.constructBrowserSelects = function(browsersJson){
+UI.prototype.getCheckResults = function(){
+    return this.checkResults;
+};
+
+UI.prototype.constructBrowserSelects = function(browsersJson, onSelectChange){
 
     var frag = document.createDocumentFragment(),
         checkVersions = this.checkVersions,
-        select,
-        option,
-        icon,
 
     constructBrowserSelect = function(defaultVersion, browserName){
-        select = document.createElement('select');
+        var select = document.createElement('select'),
+            icon;
+
+        if(typeof onSelectChange === 'function'){
+            B(select).on('change', onSelectChange);
+        }
 
         //add option for each browser version
-        B.forEach(browsersJson[browserName], constructVersionOption);
+        B.forEach(browsersJson[browserName], function(support, version){
+            if(isNaN(version)) return;
+            select.appendChild(constructVersionOption(version.match(/[\d\.]+/)[0], defaultVersion, browserName));
+        });
 
         //add select to frag
         frag.appendChild(select);
@@ -39,18 +47,22 @@ UI.prototype.constructBrowserSelects = function(browsersJson){
         frag.appendChild(icon);
     },
 
-    constructVersionOption = function(support, version){
+    constructVersionOption = function(version, defaultVersion, browserName){
+        var option;
+
         //construct options
-        option = document.createElement('option'),
-        firstLetter = browserName.charAt(0);
-        option.innerText = browserName.replace(firstLetter, firstLetter.toUpperCase())+' '+version+'+';
+        option = document.createElement('option');
+
+        option.setAttribute('data-browser-name', browserName);
+        option.setAttribute('data-browser-version', version);
+        option.innerText = browserName+' '+version+'+';
 
         //check if browser version is default
-        console.log(version == defaultVersion);
-        if(version == defaultVersion){
-            option.setAttribute('checked', '');
+        if(Number(version) === defaultVersion){
+            option.setAttribute('selected', '');
         }
-        select.appendChild(option);
+
+        return option;
     };
 
     //loop browsers, construct select
@@ -59,25 +71,55 @@ UI.prototype.constructBrowserSelects = function(browsersJson){
     return frag;
 };
 
-UI.prototype.constructTooltip = function(detailsJson, tooltipEl){
+UI.prototype.changeTooltipToFeature = function(featureDetails){
+    var tooltip = this.tooltip;
 
-    //get support overview
-    var supportOverview = constructor.constructSupportOverview.call(this, detailsJson.stats);
+    var _el = B(tooltip.el);
+    _el.removeClass('passed');
+    _el.removeClass('failed');
+    _el.addClass(featureDetails.status);
 
-    //render template
-    Mustache.render(tooltipEl.innerHTML, {
-        description: detailsJson.description
-        supportOverview: supportOverview
-    });
+    tooltip.childs.explaination.innerText = featureDetails.explaination;
+    tooltip.childs.description.innerText = featureDetails.description;
+    tooltip.childs.supportOverview.innerHTML = '';
+    tooltip.childs.supportOverview.appendChild(this.constructSupportOverview(featureDetails.stats));
+    tooltip.childs.overviewLink.setAttribute('href', 'http://caniuse.com/#search='+featureDetails.title);
+};
+
+UI.prototype.tooltipChangeState = function(toState, featureDetails, newY){
+
+    var tooltipEl = this.tooltip.el,
+        _el = B(tooltipEl),
+        self = this,
+        showTooltip = function(){
+            self.changeTooltipToFeature(featureDetails);
+            tooltipEl.setAttribute('style', 'top:'+(newY || 0)+'px;');
+            _el.addClass('visible');
+        };
+
+    switch(toState){
+        case 'show':
+            if(_el.hasClass('visible')){
+                this.tooltipChangeState('hide', null, null);
+                setTimeout(showTooltip, 300);
+            } else {
+                showTooltip();
+            }
+        break;
+
+        case 'hide':
+            _el.removeClass('visible');
+        break;
+    }
 
 };
 
-UI.prototype.constructTooltip.constructSupportOverview = function(browsersJson){
+UI.prototype.constructSupportOverview = function(browsersJson){
 
     var checkVersions = this.checkVersions;
 
     //create fragment to hold uls
-    var frag = document.createDocumentFragment();
+    var frag = document.createElement('div');
 
     //loop browsers
     for(var browserName in browsersJson){
@@ -100,6 +142,7 @@ UI.prototype.constructTooltip.constructSupportOverview = function(browsersJson){
                     //max number of versions to display
                     maxItems = 5,
                     itemCount = 0;
+
                 for(var version in versions){
                     if(versions.hasOwnProperty(version)){
 
@@ -137,6 +180,23 @@ UI.prototype.constructTooltip.constructSupportOverview = function(browsersJson){
     return frag;
 
 };
+
+UI.prototype.parseResultsInJsCode = function(checkResults, jsCode){
+
+    this.checkResults = checkResults;
+
+    B.forEach(checkResults, function(features, status){
+        B.forEach(features, function(featureDetails, idx){
+
+            jsCode = jsCode.replace(featureDetails.foundTrigger, '<a class="tooltip-trigger '+status+'" data-status="'+status+'" data-idx="'+idx+'">'+featureDetails.foundTrigger+'</a>');
+
+        });
+    });
+
+    return jsCode;
+};
+
+window.UI = UI;
 
 }());
 

@@ -22,3 +22,11 @@ body {
     margin: 0 auto;
     overflow: hidden;
 }
+
+.sticky-wrapper {
+    width: 275px;
+
+    position: fixed;
+    top: $margin-l;
+    right: $margin-l;
+}

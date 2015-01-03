@@ -2,28 +2,24 @@
     font-size: $size-s;
 
     position: absolute;
-    top: $margin-l;
-    left: $margin-l;
+    right: $margin-l;
     z-index: 2;
 
     width: 275px;
     background-color: $grey-light;
     @include border(false, $grey, $border-style-alt);
 
-    &:after {
-        content: '';
-        width: 0;
-        height: 0;
+    right: -275px;
+    @include transition(right);
+    &.visible {
+        right: $margin-l;
+    }
 
-        border-left: 10px solid transparent;
-        border-right: 10px solid transparent;
-        border-top: 10px solid $grey;
-
-        margin-left: -5px;
-
-        position: absolute;
-        left: 50%;
-        bottom: -10px;
+    &.passed header {
+        background-color: $green;
+    }
+    &.failed header {
+        background-color: $red;
     }
 
     header {
@@ -36,7 +32,13 @@
     .content {
         padding: $padding-m;
 
+        .overview-link {
+            font-size: $size-s;
+        }
+
         .support-overview {
+            margin-bottom: $margin-m;
+
             ul {
                 width: 100%;
                 overflow: hidden;
@@ -69,6 +71,10 @@
                         background-color: $green;
                     }
                 }
+            }
+
+            &:hover {
+                color: $base-color;
             }
         }
     }

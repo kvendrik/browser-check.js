@@ -15,7 +15,7 @@
 
         a {
             cursor: pointer;
-            &.error,&.error:hover {
+            &.failed,&.failed:hover {
                 color: $red;
                 border-color: $red;
             }
@@ -23,7 +23,7 @@
                 color: $yellow;
                 border-color: $yellow;
             }
-            &.pass,&.pass:hover {
+            &.passed,&.passed:hover {
                 color: $green;
                 border-color: $green;
             }

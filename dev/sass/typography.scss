@@ -66,6 +66,7 @@ select {
 
     -webkit-appearance: none;
     padding-right: $margin-m;
+    text-transform: capitalize;
 
     &:focus {
         outline: none;
