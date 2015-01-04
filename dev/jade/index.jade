@@ -1,40 +1,30 @@
 include inc/header.jade
 
-.container
-
-  header#header
+header#header
+  .container
     h1 browser-check
       span .js
 
-  :markdown
-    He as compliment unreserved projecting. Between had observe pretend delight for believe.
-    Do newspaper questions consulted sweetness do. Our sportsman his unwilling fulfilled departure law.
-    Now world own total saved **above her** cause table. Wicket myself her square remark the should far secure sex.
-    Smiling cousins warrant law explain for whether. I aim to support:
+    :markdown
+      He as compliment unreserved projecting. Between had observe pretend delight for believe.
+      Do newspaper questions consulted sweetness do. Our sportsman his unwilling fulfilled departure law.
+      Now world own total saved **above her** cause table. Wicket myself her square remark the should far secure sex.
+      Smiling cousins warrant law explain for whether. I aim to support:
 
-    I aim to support:
+      I aim to support:
 
-  section.selects-wrapper#selects-wrapper
+    section.selects-wrapper#selects-wrapper
+
+.container
 
   section.results-up
-    input.pass(type="radio", name="results-tab" checked)
-    input.warning(type="radio", name="results-tab")
-    input.error(type="radio", name="results-tab")
-
-    ul.header
-      li.ss-icon.pass check
-      li.ss-icon.warning alert
-      li.ss-icon.error delete
-    ul.tab.pass
-      li Element.getElementById
-      li Object.observe
-      li window.scrollTo
-    ul.tab.warning
-      li Element.addEventListener
-      li Object.observe
-    ul.tab.error
-      li Element.addEventListener
-      li Object.observe
+    nav
+      a(href="#", data-tab="passed").passed
+        span.ss-icon check
+      a(href="#", data-tab="failed").failed
+        span.ss-icon delete
+    ul.passed(data-tab="passed")
+    ul.failed(data-tab="failed")
 
   section.tooltip#tooltip
     header.

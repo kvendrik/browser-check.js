@@ -33,7 +33,7 @@ Browsercheck.prototype.check = function(jsCode){
                details.status = 'failed';
                results.failed.push(details);
             } else if(support.success) {
-               details.explaination = details.title+' is supported in all the browsers you aim to support!';
+               details.explaination = details.title+' is supported in all browsers you aim to support!';
                details.status = 'passed';
                results.passed.push(details);
             }

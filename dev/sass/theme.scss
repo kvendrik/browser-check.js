@@ -13,7 +13,7 @@ body {
     font: $body-weight $size-m $body-family;
     color: $base-color;
     line-height: $body-line-height;
-    background-color: $white;
+    background-color: $grey-light;
     @include border(top, $accent, $border-style-alt);
 }
 

@@ -80,7 +80,7 @@ module.exports = function (grunt){
 
     concat: {
       js: {
-        src: ['<%= options.devRoot %>/js/libs/**/*.js', '<%= options.devRoot %>/js/src/**/*.js', '<%= options.devRoot %>/js/*.js'],
+        src: ['<%= options.devRoot %>/js/libs/**/*.js', '<%= options.devRoot %>/js/classes/**/*.js', '<%= options.devRoot %>/js/modules/**/*.js', '<%= options.devRoot %>/js/*.js'],
         dest: '<%= options.webRoot %>/js/app.js'
       }
     },

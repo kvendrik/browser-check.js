@@ -1,242 +1,4 @@
 !function(a,b,c){"use strict";var d=function(a,b,d){d||d===c?e.prototype[a]=b:e[a]=b},e=function(d){if(this===a||this===c)return new e(d);var f=typeof d;if("object"===f)if(d[1]&&1===d[1].nodeType)for(var g=0,h=d.length;h>g;g++)this[g]=d[g];else this[0]=d;else"string"===f&&this._selector(d,b);return this};d("_selector",function(a,c){if(0===a.indexOf("#"))this[0]=b.getElementById(a.replace("#",""));else for(var d=0===a.indexOf(".")?c.getElementsByClassName(a.replace(".","")):/^[a-zA-Z]+$/.test(a)?c.getElementsByTagName(a):c.querySelectorAll(a),e=0,f=d.length;f>e;e++)this[e]=d[e]}),d("ajax",function(a){var b=new XMLHttpRequest,d=a.data,e=a.dataType;b.onreadystatechange=function(){if(4===b.readyState&&200===b.status){var c,d=b.responseText;if("json"===e)try{c=JSON.parse(d)}catch(f){c=d}else c=d;"function"==typeof a.success&&a.success(c,b)}};var f=a.type!==c?a.type.toUpperCase():"GET",g=["POST","PUT","DELETE"];b.open(f,a.url,!0),-1!==g.indexOf(f)&&("json"===e?b.setRequestHeader("Content-Type","application/json; charset=UTF-8"):b.setRequestHeader("Content-Type","application/x-www-form-urlencoded")),"json"!==e||"object"!=typeof d||Array.isArray(d)||(d=JSON.stringify(d)),b.send(d)},!1),d("getJSON",function(a,b){return e.ajax({dataType:"json",url:a,success:b})},!1),"object"==typeof b.documentElement.classList?(d("hasClass",function(a){return this[0].classList.contains(a)!==!1?this:!1}),d("addClass",function(a){return this[0].classList.add(a),this}),d("removeClass",function(a){return this[0].classList.remove(a),this}),d("toggleClass",function(a){return this[0].classList.toggle(a),this})):(d("_ClassesBase",function(a,b,c){var d=a.className.split(" ");if(c)d.push(b);else{var e=d.indexOf(b);-1!==e&&d.splice(e,1)}a.className=d.join(" ")}),d("hasClass",function(a){return-1!==this[0].className.split(" ").indexOf(a)?this:!1}),d("addClass",function(a){return this.hasClass(a)||this._ClassesBase(this[0],a,!0),this}),d("removeClass",function(a){return this.hasClass(a)&&this._ClassesBase(this[0],a,!1),this}),d("toggleClass",function(a){return this.hasClass(a)?this.removeClass(a):this.addClass(a),this})),"function"==typeof a.FastButton?d("click",function(a){return new FastButton(this[0],a),this}):d("click",function(a){return this.on("click",a),this}),d("resizeEnd",function(a){return this.on("resize",function(){typeof this.resizeEndTimeout!==c&&clearTimeout(this.resizeEndTimeout),this.resizeEndTimeout=setTimeout(a,200)}),this}),d("each",function(a){for(var b in this)1===this[b].nodeType&&a(this[b]);return this}),d("on",function(a,b){return this[0].addEventListener(a,b,!1),this}),d("off",function(a,b){return this[0].removeEventListener(a,b,!1),this}),d("extend",function(){for(var a=arguments,b=1,c=a.length;c>b;b++)for(var d in a[b])a[b].hasOwnProperty(d)&&(a[0][d]=a[b][d]);return a[0]},!1),d("find",function(a){return this._selector(a,this[0]),this}),d("forEach",function(a,b){if(Array.isArray(a))a.forEach(b);else if("object"==typeof a)for(var c in a)a.hasOwnProperty(c)&&b(a[c],c,a);return this},!1),d("serialize",function(){var a,b=this[0],c=b.getElementsByTagName("input"),d=b.getElementsByTagName("textarea"),e="";for(a=c.length-1;a>=0;a--){var f=c[a],g=f.getAttribute("type");"radio"===g||"checkbox"===g?f.checked===!0&&(e+=f.name+"="+f.value+"&"):e+=f.name+"="+f.value+"&"}for(a=d.length-1;a>=0;a--){var h=d[a];e+=h.name+"="+h.value+"&"}return e=e.slice(0,-1)}),d("setInterval",function(a,b){var c=this;return setTimeout(function(){a(),c.setInterval(a,b,!0)},b)},!1);var f=e;f.fn=e.prototype,a.B=f}(this,this.document);
-/*
-* Observer.js - A teeny tiny library to listen for object changes
-* http://github.com/kvendrik/Observer.js
-*/
-
-var Observer = function(obj){
-  this[0] = obj;
-  this.listeners = {};
-};
-
-Observer.prototype.set = function(){
-  var obj = this[0],
-      firstArg = arguments[0],
-      changes = { add: [], update: [] },
-      oldVal,
-      type,
-      changeDetails;
-
-  //changes or adds a property
-  //and stores the details of the change
-  var changeProp = function(prop, newVal){
-    if(obj[prop] !== newVal){
-      //if it is indeed a change
-
-      //store the current value
-      oldVal = obj[prop];
-
-      //get type change type
-      type = obj[prop] === undefined ? 'add' : 'update';
-
-      //change the property to its new value
-      obj[prop] = newVal;
-
-      //create the change details
-      changeDetails = {
-         name: prop,
-         object: obj,
-         type: type
-      };
-
-      if(oldVal){
-        //if we have an old value
-        //and its theirfor not an add
-        changeDetails.oldVal = oldVal;
-      }
-
-      //push the current change into the
-      //array of changes
-      changes[type].push(changeDetails);
-
-    }
-  };
-
-  if(typeof firstArg === 'object'){
-    //multiple changes
-    var objChanges = firstArg;
-
-    //loop all changes
-    for(var prop in objChanges){
-      changeProp(prop, objChanges[prop]);
-    }
-
-  } else if(typeof firstArg === 'string' || typeof firstArg === 'number'){
-    //single change
-    changeProp(firstArg, arguments[1]);
-  }
-
-  if(changes.add.length > 0 || changes.update.length > 0){
-    //if there were indeed changes
-
-    //trigger the global change event
-    this.triggerEvent('change', changes.add.concat(changes.update));
-
-    if(changes.add.length > 0){
-      //if there were additions, trigger the add event
-      this.triggerEvent('add', changes.add);
-    }
-
-    if(changes.update.length > 0){
-      //if there were updates, trigger the add event
-      this.triggerEvent('update', changes.update);
-    }
-
-  }
-
-  return this;
-};
-
-Observer.prototype.delete = function(){
-  var obj = this[0],
-      changes = [],
-      oldVal;
-
-  for(var i = 0; i < arguments.length; i++){
-    //loop given properties
-
-    var prop = arguments[i];
-
-    //if current prop exists
-    if(obj[prop]){
-
-      //store old value
-      oldVal = obj[prop];
-
-      //delete prop
-      delete obj[prop];
-
-      //store details
-      changes.push({
-        name: prop,
-        object: obj,
-        type: 'delete',
-        oldVal: oldVal
-      });
-
-    }
-  }
-
-  if(changes.length > 0){
-    //if there were changes
-
-    this.triggerEvent('change', changes);
-    this.triggerEvent('delete', changes);
-  }
-
-  return this;
-};
-
-Observer.prototype.on = function(event, callback){
-  this.listeners[event] = callback;
-  return this;
-};
-
-Observer.prototype.triggerEvent = function(event, data){
-  var listeners = this.listeners;
-
-  if(listeners[event]){
-    listeners[event](data);
-  }
-
-  return this;
-};
-(function(){
-'use strict';
-
-var Browsercheck = function(featuresJSON, checkVersions){
-   this.checkVersions = checkVersions;
-   this.featuresJSON = featuresJSON;
-};
-
-Browsercheck.prototype.check = function(jsCode){
-
-   var featuresJSON = this.featuresJSON,
-       results = { passed: [], failed: [] };
-
-   //check if trigger in code
-   //check feature support against checkVersions
-   //add feature details to either passed or failed object array
-
-   for(var i = 0; i < featuresJSON.length; i++){
-
-      var details = featuresJSON[i],
-          triggers = details['triggers'];
-
-      for(var j = 0; j < triggers.length; j++){
-         var trigger = triggers[j];
-
-         if(new RegExp(trigger+'[\'\"\(\s]').test(jsCode)){
-            var support = this.checkFeatureSupported(details);
-
-            details.foundTrigger = trigger;
-
-            if(support.success === false){
-               details.explaination = details.title+' is not supported in '+support.details.browser.name+' v'+support.details.browser.version;
-               details.status = 'failed';
-               results.failed.push(details);
-            } else if(support.success) {
-               details.explaination = details.title+' is supported in all the browsers you aim to support!';
-               details.status = 'passed';
-               results.passed.push(details);
-            }
-
-            break;
-         }
-
-      }
-
-   }
-
-   return results;
-
-};
-
-Browsercheck.prototype.checkFeatureSupported = function(featureDetails){
-
-   var checkVersions = this.checkVersions,
-       featureSupport = featureDetails.stats;
-
-   //loop browsers
-   for(var browserName in checkVersions){
-      if(checkVersions.hasOwnProperty(browserName)){
-
-         var checkVersion = checkVersions[browserName],
-             versionSupport = featureSupport[browserName];
-
-         //loop browser's versions
-         for(var version in versionSupport){
-            if(versionSupport.hasOwnProperty(version) && Number(version) >= checkVersion){
-
-               //current version number is above or
-               //the same as the lowest version we need to check
-
-               if(versionSupport[version] === 'n'){
-                  return {
-                     success: false,
-                     details: {
-                        browser: {
-                           name: browserName,
-                           version: version
-                        }
-                     }
-                  };
-               }
-
-
-            }
-         }
-
-      }
-   }
-
-   return { success: true, details: null };
-
-};
-
-window.Browsercheck = Browsercheck;
-
-}());
 //From https://github.com/Fyrd/caniuse/tree/master/features-json.
 //All JS features from 1 to Hashchange
 
@@ -6250,34 +6012,350 @@ var featuresJSON = [{
   "chrome_id":"",
   "shown":true
 }];
+/*
+* Observer.js - A teeny tiny library to listen for object changes
+* http://github.com/kvendrik/Observer.js
+*/
+
+var Observer = function(obj){
+  this[0] = obj;
+  this.listeners = {};
+};
+
+Observer.prototype.set = function(){
+  var obj = this[0],
+      firstArg = arguments[0],
+      changes = { add: [], update: [] },
+      oldVal,
+      type,
+      changeDetails;
+
+  //changes or adds a property
+  //and stores the details of the change
+  var changeProp = function(prop, newVal){
+    if(obj[prop] !== newVal){
+      //if it is indeed a change
+
+      //store the current value
+      oldVal = obj[prop];
+
+      //get type change type
+      type = obj[prop] === undefined ? 'add' : 'update';
+
+      //change the property to its new value
+      obj[prop] = newVal;
+
+      //create the change details
+      changeDetails = {
+         name: prop,
+         object: obj,
+         type: type
+      };
+
+      if(oldVal){
+        //if we have an old value
+        //and its theirfor not an add
+        changeDetails.oldVal = oldVal;
+      }
+
+      //push the current change into the
+      //array of changes
+      changes[type].push(changeDetails);
+
+    }
+  };
+
+  if(typeof firstArg === 'object'){
+    //multiple changes
+    var objChanges = firstArg;
+
+    //loop all changes
+    for(var prop in objChanges){
+      changeProp(prop, objChanges[prop]);
+    }
+
+  } else if(typeof firstArg === 'string' || typeof firstArg === 'number'){
+    //single change
+    changeProp(firstArg, arguments[1]);
+  }
+
+  if(changes.add.length > 0 || changes.update.length > 0){
+    //if there were indeed changes
+
+    //trigger the global change event
+    this.triggerEvent('change', changes.add.concat(changes.update));
+
+    if(changes.add.length > 0){
+      //if there were additions, trigger the add event
+      this.triggerEvent('add', changes.add);
+    }
+
+    if(changes.update.length > 0){
+      //if there were updates, trigger the add event
+      this.triggerEvent('update', changes.update);
+    }
+
+  }
+
+  return this;
+};
+
+Observer.prototype.delete = function(){
+  var obj = this[0],
+      changes = [],
+      oldVal;
+
+  for(var i = 0; i < arguments.length; i++){
+    //loop given properties
+
+    var prop = arguments[i];
+
+    //if current prop exists
+    if(obj[prop]){
+
+      //store old value
+      oldVal = obj[prop];
+
+      //delete prop
+      delete obj[prop];
+
+      //store details
+      changes.push({
+        name: prop,
+        object: obj,
+        type: 'delete',
+        oldVal: oldVal
+      });
+
+    }
+  }
+
+  if(changes.length > 0){
+    //if there were changes
+
+    this.triggerEvent('change', changes);
+    this.triggerEvent('delete', changes);
+  }
+
+  return this;
+};
+
+Observer.prototype.on = function(event, callback){
+  this.listeners[event] = callback;
+  return this;
+};
+
+Observer.prototype.triggerEvent = function(event, data){
+  var listeners = this.listeners;
+
+  if(listeners[event]){
+    listeners[event](data);
+  }
+
+  return this;
+};
 (function(){
 'use strict';
 
-var UI = function(checkVersions, tooltipEl){
-    this.checkVersions = checkVersions;
-    this.tooltip = {
-        el: tooltipEl,
-        childs: {
-            explaination: tooltipEl.getElementsByTagName('header')[0],
-            description: tooltipEl.getElementsByClassName('description')[0],
-            supportOverview: tooltipEl.getElementsByClassName('support-overview')[0],
-            overviewLink: tooltipEl.getElementsByClassName('overview-link')[0]
-        }
+var Browsercheck = function(featuresJSON, checkVersions){
+   this.checkVersions = checkVersions;
+   this.featuresJSON = featuresJSON;
+};
+
+Browsercheck.prototype.check = function(jsCode){
+
+   var featuresJSON = this.featuresJSON,
+       results = { passed: [], failed: [] };
+
+   //check if trigger in code
+   //check feature support against checkVersions
+   //add feature details to either passed or failed object array
+
+   for(var i = 0; i < featuresJSON.length; i++){
+
+      var details = featuresJSON[i],
+          triggers = details['triggers'];
+
+      for(var j = 0; j < triggers.length; j++){
+         var trigger = triggers[j];
+
+         if(new RegExp(trigger+'[\'\"\(\s]').test(jsCode)){
+            var support = this.checkFeatureSupported(details);
+
+            details.foundTrigger = trigger;
+
+            if(support.success === false){
+               details.explaination = details.title+' is not supported in '+support.details.browser.name+' v'+support.details.browser.version;
+               details.status = 'failed';
+               results.failed.push(details);
+            } else if(support.success) {
+               details.explaination = details.title+' is supported in all browsers you aim to support!';
+               details.status = 'passed';
+               results.passed.push(details);
+            }
+
+            break;
+         }
+
+      }
+
+   }
+
+   return results;
+
+};
+
+Browsercheck.prototype.checkFeatureSupported = function(featureDetails){
+
+   var checkVersions = this.checkVersions,
+       featureSupport = featureDetails.stats;
+
+   //loop browsers
+   for(var browserName in checkVersions){
+      if(checkVersions.hasOwnProperty(browserName)){
+
+         var checkVersion = checkVersions[browserName],
+             versionSupport = featureSupport[browserName];
+
+         //loop browser's versions
+         for(var version in versionSupport){
+            if(versionSupport.hasOwnProperty(version) && Number(version) >= checkVersion){
+
+               //current version number is above or
+               //the same as the lowest version we need to check
+
+               if(versionSupport[version] === 'n'){
+                  return {
+                     success: false,
+                     details: {
+                        browser: {
+                           name: browserName,
+                           version: version
+                        }
+                     }
+                  };
+               }
+
+
+            }
+         }
+
+      }
+   }
+
+   return { success: true, details: null };
+
+};
+
+window.Browsercheck = Browsercheck;
+
+}());
+var codeEditor = (function(){
+    'use strict';
+
+    var codeInput = _gebi('code-input');
+
+    var codeEditor = {};
+
+    codeEditor.init = function(checkVersions){
+        this.checkVersions = checkVersions;
     };
-};
 
-UI.prototype.getCheckResults = function(){
-    return this.checkResults;
-};
+    codeEditor.browserCheckCode = function(codeInput){
+        var results = Browsercheck.check(codeInput.innerText),
+            parsedHtml = UI.parseResultsInJsCode(results, codeInput.innerText);
 
-UI.prototype.constructBrowserSelects = function(browsersJson, onSelectChange){
+        codeInput.innerHTML = parsedHtml;
 
-    var frag = document.createDocumentFragment(),
-        checkVersions = this.checkVersions,
+        UI.tooltipChangeState({
+            action: 'hide'
+        });
 
-    constructBrowserSelect = function(defaultVersion, browserName){
-        var select = document.createElement('select'),
+        B.forEach(codeInput.getElementsByClassName('tooltip-trigger'), function(el){
+            if(el.nodeType === 1){
+                var _el = B(el);
+
+                if(!_el.hasClass('tooltip-trigger')) return;
+
+                _el.click(function(e){
+                    e.preventDefault();
+
+                    var el = e.target;
+
+                    var featureDetails = results[el.getAttribute('data-status')][el.getAttribute('data-idx')];
+                    UI.tooltipChangeState({
+                        action: 'show',
+                        featureDetails: featureDetails,
+                        newY: el.offsetTop
+                    });
+                });
+            }
+        });
+
+        resultsUp.constructTabs(results);
+        resultsUp.open();
+    };
+
+    codeEditor.parseResultsInJsCode = function(checkResults, jsCode){
+        this.checkResults = checkResults;
+
+        B.forEach(checkResults, function(features, status){
+            B.forEach(features, function(featureDetails, idx){
+
+                jsCode = jsCode.replace(featureDetails.foundTrigger, '<a class="tooltip-trigger '+status+'" data-status="'+status+'" data-idx="'+idx+'">'+featureDetails.foundTrigger+'</a>');
+
+            });
+        });
+
+        return jsCode;
+    };
+
+    return codeEditor;
+
+}());
+//add the selects
+var browserSelects = (function(){
+    'use strict';
+
+    var browserSelects = {};
+
+    browserSelects.init = function(featuresJSON, checkVersions){
+
+        //construct the selects
+        var selects = this.constructBrowserSelects(featuresJSON[0].stats, checkVersions);
+
+        //add selects to DOM
+        _gebi('selects-wrapper').appendChild(selects);
+
+    };
+
+    browserSelects.constructBrowserSelects = function(browsersJson, checkVersions){
+
+        var frag = document.createDocumentFragment();
+
+        //loop browsers, construct select
+        B.forEach(checkVersions, function(defaultVersion, browserName){
+            frag.appendChild(browserSelects.constructSelect(defaultVersion, browserName, browsersJson));
+        });
+
+        return frag;
+
+    };
+
+    browserSelects.constructSelect = function(defaultVersion, browserName, browsersJson){
+        var frag = document.createDocumentFragment(),
+            select = document.createElement('select'),
             icon;
+
+        var onSelectChange = function(e){
+            var options = this.getElementsByTagName('option');
+
+            B.forEach(options, function(option){
+                if(option.selected){
+                    checkVersions.set(option.getAttribute('data-browser-name'), Number(option.getAttribute('data-browser-version')));
+                }
+            });
+        };
 
         if(typeof onSelectChange === 'function'){
             B(select).on('change', onSelectChange);
@@ -6286,7 +6364,7 @@ UI.prototype.constructBrowserSelects = function(browsersJson, onSelectChange){
         //add option for each browser version
         B.forEach(browsersJson[browserName], function(support, version){
             if(isNaN(version)) return;
-            select.appendChild(constructVersionOption(version.match(/[\d\.]+/)[0], defaultVersion, browserName));
+            select.appendChild(browserSelects.constructVersionOption(version.match(/[\d\.]+/)[0], defaultVersion, browserName));
         });
 
         //add select to frag
@@ -6297,9 +6375,11 @@ UI.prototype.constructBrowserSelects = function(browsersJson, onSelectChange){
         icon.className = 'ss-icon ss-standard';
         icon.innerText = 'navigatedown';
         frag.appendChild(icon);
-    },
 
-    constructVersionOption = function(version, defaultVersion, browserName){
+        return frag;
+    };
+
+    browserSelects.constructVersionOption = function(version, defaultVersion, browserName){
         var option;
 
         //construct options
@@ -6317,141 +6397,249 @@ UI.prototype.constructBrowserSelects = function(browsersJson, onSelectChange){
         return option;
     };
 
-    //loop browsers, construct select
-    B.forEach(checkVersions, constructBrowserSelect);
+    return browserSelects;
 
-    return frag;
-};
+}());
+//Results up
+var resultsUp = (function(){
+    'use strict';
 
-UI.prototype.changeTooltipToFeature = function(featureDetails){
-    var tooltip = this.tooltip;
+    var el = document.getElementsByClassName('results-up')[0],
+        navAnchors = el.getElementsByTagName('nav')[0].getElementsByTagName('a'),
+        lastOpenTabEl,
+        lastOpenTabNavEl;
 
-    var _el = B(tooltip.el);
-    _el.removeClass('passed');
-    _el.removeClass('failed');
-    _el.addClass(featureDetails.status);
+    var resultsUp = {};
 
-    tooltip.childs.explaination.innerText = featureDetails.explaination;
-    tooltip.childs.description.innerText = featureDetails.description;
-    tooltip.childs.supportOverview.innerHTML = '';
-    tooltip.childs.supportOverview.appendChild(this.constructSupportOverview(featureDetails.stats));
-    tooltip.childs.overviewLink.setAttribute('href', 'http://caniuse.com/#search='+featureDetails.title);
-};
+    resultsUp.init = function(){
+        //make nav work
+        B.forEach(navAnchors, function(anchor){
+            if(anchor.nodeType === 1){
+                B(anchor).click(function(){
+                    resultsUp.openTab(anchor.getAttribute('data-tab'));
+                });
+            }
+        });
+    };
 
-UI.prototype.tooltipChangeState = function(toState, featureDetails, newY){
-
-    var tooltipEl = this.tooltip.el,
-        _el = B(tooltipEl),
-        self = this,
-        showTooltip = function(){
-            self.changeTooltipToFeature(featureDetails);
-            tooltipEl.setAttribute('style', 'top:'+(newY || 0)+'px;');
-            _el.addClass('visible');
+    resultsUp.open = function(){
+        var openResultsUp = function(){
+            _el.addClass('is-visible');
         };
 
-    switch(toState){
-        case 'show':
-            if(_el.hasClass('visible')){
-                this.tooltipChangeState('hide', null, null);
-                setTimeout(showTooltip, 300);
-            } else {
-                showTooltip();
-            }
-        break;
-
-        case 'hide':
-            _el.removeClass('visible');
-        break;
-    }
-
-};
-
-UI.prototype.constructSupportOverview = function(browsersJson){
-
-    var checkVersions = this.checkVersions;
-
-    //create fragment to hold uls
-    var frag = document.createElement('div');
-
-    //loop browsers
-    for(var browserName in browsersJson){
-        if(browsersJson.hasOwnProperty(browserName)){
-
-            //create wrapper
-            var wrapper = document.createElement('ul');
-
-            //check if we need to check this browser
-            if(!checkVersions[browserName]) continue;
-
-            //create first li with browser name
-            var title = document.createElement('li');
-            title.innerText = browserName;
-            wrapper.appendChild(title);
-
-            //loop versions
-            (function(){
-                var versions = browsersJson[browserName],
-                    //max number of versions to display
-                    maxItems = 5,
-                    itemCount = 0;
-
-                for(var version in versions){
-                    if(versions.hasOwnProperty(version)){
-
-                        //check if maxitems reached
-                        if(itemCount >= maxItems) break;
-
-                        //check if version is valid number
-                        //and theirfor parse-able
-                        var isNum = !isNaN(version);
-                        if(!isNum) continue;
-
-                        //check if we need to check this version
-                        if(Number(version) >= checkVersions[browserName]){
-
-                            var support = versions[version];
-
-                            var versionItem = document.createElement('li');
-                            versionItem.innerText = version;
-                            versionItem.className = support;
-                            wrapper.appendChild(versionItem);
-
-                            itemCount++;
-                        }
-
-                    }
-                }
-            }());
-
-            //add done ul to fragment
-            frag.appendChild(wrapper);
-
+        var _el = B(el);
+        if(_el.hasClass('is-visible')){
+            _el.removeClass('is-visible');
+            setTimeout(openResultsUp, 300);
+        } else {
+            openResultsUp();
         }
-    }
+    };
 
-    return frag;
+    resultsUp.constructTabs = function(browserCheckResults){
+        B(el).find('ul').each(function(list){
+            list.innerHTML = '';
 
-};
+            var status = list.getAttribute('data-tab'),
+                statusResults = browserCheckResults[status],
+                listItems = document.createDocumentFragment();
 
-UI.prototype.parseResultsInJsCode = function(checkResults, jsCode){
+            var createItem = function(contents){
+                var el = document.createElement('li');
+                el.innerText = contents;
+                listItems.appendChild(el);
+            };
 
-    this.checkResults = checkResults;
+            if(statusResults.length > 0){
+                B.forEach(statusResults, function(featureDetails){
+                    createItem(featureDetails.title);
+                });
+            } else {
+                createItem('None '+status);
+            }
 
-    B.forEach(checkResults, function(features, status){
-        B.forEach(features, function(featureDetails, idx){
-
-            jsCode = jsCode.replace(featureDetails.foundTrigger, '<a class="tooltip-trigger '+status+'" data-status="'+status+'" data-idx="'+idx+'">'+featureDetails.foundTrigger+'</a>');
-
+            list.appendChild(listItems);
         });
-    });
+    };
 
-    return jsCode;
-};
+    resultsUp.openTab = function(tabName){
+        var getElByTagNameAndAttr = function(tagName, attrName){
+            var els = el.getElementsByTagName(tagName);
 
-window.UI = UI;
+            for(var i = 0; i < els.length; i++){
+                var el = els[i];
+                if(el.nodeType === 1 && el.getAttribute(attrName) === tabName){
+                    return el;
+                }
+            }
+        };
+
+        var openTabEl = getElByTagNameAndAttr('ul', 'data-tab'),
+            openTabNavEl = getElByTagNameAndAttr('a', 'data-tab');
+
+        B(openTabNavEl).addClass('is-active');
+        B(openTabEl).addClass('is-open');
+
+        if(lastOpenTabEl){
+            B(lastOpenTabEl).removeClass('is-open');
+        }
+
+        if(lastOpenTabNavEl){
+            B(lastOpenTabNavEl).removeClass('is-active');
+        }
+
+        lastOpenTabEl = openTabEl;
+        lastOpenTabNavEl = openTabNavEl;
+    };
+
+    resultsUp.openFirstTab = function(){
+        this.openTab(el.getElementsByTagName('ul')[0].getAttribute('data-tab'));
+    };
+
+    return resultsUp;
+}());
+var tooltip = (function(){
+    'use strict';
+
+    var tooltip = {};
+
+    tooltip.init = function(checkVersions, tooltipEl){
+        this.checkVersions = checkVersions;
+        this.tooltip = {
+            el: tooltipEl,
+            childs: {
+                explaination: tooltipEl.getElementsByTagName('header')[0],
+                description: tooltipEl.getElementsByClassName('description')[0],
+                supportOverview: tooltipEl.getElementsByClassName('support-overview')[0],
+                overviewLink: tooltipEl.getElementsByClassName('overview-link')[0]
+            }
+        };
+    };
+
+    tooltip.changeTooltipToFeature = function(featureDetails){
+        var tooltip = this.tooltip;
+
+        var _el = B(tooltip.el);
+        _el.removeClass('passed');
+        _el.removeClass('failed');
+        _el.addClass(featureDetails.status);
+
+        tooltip.childs.explaination.innerText = featureDetails.explaination;
+        tooltip.childs.description.innerText = featureDetails.description;
+        tooltip.childs.supportOverview.innerHTML = '';
+        tooltip.childs.supportOverview.appendChild(this.constructSupportOverview(featureDetails.stats));
+        tooltip.childs.overviewLink.setAttribute('href', 'http://caniuse.com/#search='+featureDetails.title);
+    };
+
+    tooltip.tooltipChangeState = function(options){
+
+        var toState = options.action,
+            featureDetails = options.featureDetails,
+            newY = options.newY;
+
+        var tooltipEl = this.tooltip.el,
+            _el = B(tooltipEl),
+            self = this,
+            showTooltip = function(){
+                self.changeTooltipToFeature(featureDetails);
+                if(newY) tooltipEl.setAttribute('style', 'top:'+(newY)+'px;');
+                _el.addClass('is-visible');
+            };
+
+        switch(toState){
+            case 'show':
+                if(_el.hasClass('is-visible')){
+                    this.tooltipChangeState({
+                        action: 'hide'
+                    });
+                    setTimeout(showTooltip, 300);
+                } else {
+                    showTooltip();
+                }
+            break;
+
+            case 'hide':
+                _el.removeClass('is-visible');
+            break;
+        }
+
+    };
+
+    tooltip.constructSupportOverview = function(browsersJson){
+
+        var checkVersions = this.checkVersions;
+
+        //create fragment to hold uls
+        var frag = document.createElement('div');
+
+        //loop browsers
+        for(var browserName in browsersJson){
+            if(browsersJson.hasOwnProperty(browserName)){
+
+                //create wrapper
+                var wrapper = document.createElement('ul');
+
+                //check if we need to check this browser
+                if(!checkVersions[browserName]) continue;
+
+                //create first li with browser name
+                var title = document.createElement('li');
+                title.innerText = browserName;
+                wrapper.appendChild(title);
+
+                //loop versions
+                (function(){
+                    var versions = browsersJson[browserName],
+                        //max number of versions to display
+                        maxItems = 5,
+                        itemCount = 0;
+
+                    for(var version in versions){
+                        if(versions.hasOwnProperty(version)){
+
+                            //check if maxitems reached
+                            if(itemCount >= maxItems) break;
+
+                            //check if version is valid number
+                            //and theirfor parse-able
+                            var isNum = !isNaN(version);
+                            if(!isNum) continue;
+
+                            //check if we need to check this version
+                            if(Number(version) >= checkVersions[browserName]){
+
+                                var support = versions[version];
+
+                                var versionItem = document.createElement('li');
+                                versionItem.innerText = version;
+                                versionItem.className = support;
+                                wrapper.appendChild(versionItem);
+
+                                itemCount++;
+                            }
+
+                        }
+                    }
+                }());
+
+                //add done ul to fragment
+                frag.appendChild(wrapper);
+
+            }
+        }
+
+        return frag;
+
+    };
+
+    return tooltip;
 
 }());
 
+
+var _gebi = function(id){
+	return document.getElementById(id);
+};
 
 (function(UI, Browsercheck){
 	'use strict';
@@ -6468,68 +6656,27 @@ window.UI = UI;
 	});
 
 	//create shorthands
-	var _gebi = function(id){
-		return document.getElementById(id);
-	};
+	var tooltipEl = _gebi('tooltip');
 
 	//construct new instance of classes
 	//classes only read from checkVersions
 	//which is why passing only the raw object is okay
-	UI = new UI(checkVersions[0], _gebi('tooltip'));
+	UI = new UI(checkVersions[0], tooltipEl);
 	Browsercheck = new Browsercheck(featuresJSON, checkVersions[0]);
-
-	var browserCheckCode = function(jsCode){
-		var results = Browsercheck.check(codeInput.innerText),
-			parsedHtml = UI.parseResultsInJsCode(results, codeInput.innerText);
-
-		codeInput.innerHTML = parsedHtml;
-
-		B.forEach(codeInput.getElementsByClassName('tooltip-trigger'), function(el){
-			if(el.nodeType === 1){
-				var _el = B(el);
-
-				if(!_el.hasClass('tooltip-trigger')) return;
-
-				_el.click(function(e){
-					e.preventDefault();
-
-					var el = e.target,
-						featureDetails = UI.getCheckResults()[el.getAttribute('data-status')][el.getAttribute('data-idx')];
-
-					UI.tooltipChangeState('show', featureDetails, el.offsetTop);
-				});
-			}
-		});
-	};
-
-	//get code input
-	var codeInput = _gebi('code-input');
 
 	//listen for checkVersions changes
 	checkVersions.on('change', function(details){
-		browserCheckCode(codeInput.innerText);
+		codeEditor.browserCheckCode(codeInput);
 	});
 
-	//add the selects
-	(function(){
-		var onSelectChange = function(e){
-	    	var options = this.getElementsByTagName('option');
+	//init browser selects
+	browserSelects.init(featuresJSON, checkVersions[0]);
 
-	    	B.forEach(options, function(option){
-	    		if(option.selected){
-	    			checkVersions.set(option.getAttribute('data-browser-name'), Number(option.getAttribute('data-browser-version')));
-	    		}
-	    	});
-	    };
-
-		//construct the selects
-		var selects = UI.constructBrowserSelects(featuresJSON[0].stats, onSelectChange);
-
-		//add selects to DOM
-		_gebi('selects-wrapper').appendChild(selects);
-	}());
+	//init resultsup
+	resultsUp.init(checkVersions);
 
 	//browser check code on load
-	browserCheckCode(codeInput.innerText);
+	codeEditor.init();
+	codeEditor.browserCheckCode();
 
 }(window.UI, window.Browsercheck));

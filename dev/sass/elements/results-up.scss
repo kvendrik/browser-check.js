@@ -8,83 +8,77 @@
 
     width: 270px;
 
+    right: -275px;
+    @include transition(right);
+    &.is-visible {
+        right: $margin-l;
+    }
+
     line-height: 0;
 
-    input[type="radio"]{
-        width: 40px;
-        height: 40px;
-        display: inline-block;
+    nav {
+        width: 100%;
 
-        cursor: pointer;
-        -webkit-appearance: none;
+        a {
+            display: inline-block;
 
-        margin: 0;
+            width: 40px;
+            height: 40px;
+            line-height: 44px;
+            text-align: center;
 
-        &:focus {
-            outline: none;
-        }
+            //color: $grey;
+            background-color: $grey;
+            border: none;
 
-        &.error:checked ~ ul.tab.error {
-            display: block;
-        }
-        &.warning:checked ~ ul.tab.warning {
-            display: block;
-        }
-        &.pass:checked ~ ul.tab.pass {
-            display: block;
+            cursor: pointer;
+
+            &:hover {
+                color: $base-color;
+            }
+
+            &.is-active, .is-active:hover {
+                color: $white;
+            }
+            &.passed.is-active {
+                background-color: $green;
+            }
+            &.failed.is-active {
+                background-color: $red;
+            }
         }
     }
 
     ul {
+        width: 100%;
         margin: 0;
-        li {
-            color: $white;
-            line-height: $body-line-height;
-        }
-    }
+        display: none;
 
-    ul,li {
-        &.error {
-            background-color: $red;
-            &.active,li.active {
-                background-color: $red-dark;
-            }
+        li {
+            margin: 0;
+            padding: $padding-m;
+            color: $white;
+            display: block;
+            cursor: pointer;
         }
-        &.warning {
-            background-color: $yellow;
-            &.active,li.active {
-                background-color: $yellow-dark;
-            }
+
+        &.is-open {
+            display: block;
         }
-        &.pass,li.active {
+
+        &.passed li {
             background-color: $green;
-            &.active {
+
+            &:hover {
                 background-color: $green-dark;
             }
         }
-    }
+        &.failed li {
+            background-color: $red;
 
-    ul.header {
-        position: absolute;
-        top: 0;
-        z-index: -1;
-
-        li {
-            width: 40px;
-            height: 40px;
-            text-align: center;
-            line-height: 45px;
-            display: inline-block;
-
-            position: relative;
-        }
-    }
-
-    ul.tab {
-        display: none;
-        li {
-            display: block;
-            padding: $padding-s;
+            &:hover {
+                background-color: $red-dark;
+            }
         }
     }
 

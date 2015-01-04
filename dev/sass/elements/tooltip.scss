@@ -5,13 +5,15 @@
     right: $margin-l;
     z-index: 2;
 
+    margin-bottom: $margin-l;
+
     width: 275px;
     background-color: $grey-light;
     @include border(false, $grey, $border-style-alt);
 
     right: -275px;
     @include transition(right);
-    &.visible {
+    &.is-visible {
         right: $margin-l;
     }
 
