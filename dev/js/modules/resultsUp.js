@@ -1,5 +1,5 @@
 //Results up
-var resultsUp = (function(){
+var resultsUp = (function(codeEditor){
     'use strict';
 
     var el = _gebi('results-up'),
@@ -7,13 +7,11 @@ var resultsUp = (function(){
         lastOpenTabNavEl,
         resultsUp = {};
 
-    resultsUp.init = function(stickyBreakpointY, codeEditor){
+    resultsUp.init = function(stickyBreakpointY){
 
         var navAnchors = el.getElementsByTagName('nav')[0].getElementsByTagName('a'),
             self = this,
             _el = B(el);
-
-        this.codeEditor = codeEditor;
 
         //make nav work
         B.forEach(navAnchors, function(anchor){
@@ -58,7 +56,6 @@ var resultsUp = (function(){
     };
 
     resultsUp.constructTabs = function(browserCheckResults){
-        var self = this;
         B(el).find('ul').each(function(list){
             list.innerHTML = '';
 
@@ -77,9 +74,9 @@ var resultsUp = (function(){
                     e.preventDefault();
 
                     var el = e.target,
-                        anchor = self.codeEditor.getAnchorByStatusAndIdx(el.getAttribute('data-status'), el.getAttribute('data-idx'));
+                        anchor = codeEditor.getAnchorByStatusAndIdx(el.getAttribute('data-status'), el.getAttribute('data-idx'));
 
-                    self.codeEditor.openTooltipByAnchor(anchor);
+                    codeEditor.openTooltipByAnchor(anchor);
                 });
 
                 listItems.appendChild(el);
@@ -134,4 +131,4 @@ var resultsUp = (function(){
     };
 
     return resultsUp;
-}());
+}(codeEditor));

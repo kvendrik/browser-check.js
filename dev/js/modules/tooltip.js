@@ -1,12 +1,11 @@
-var tooltip = (function(){
+var tooltip = (function(Velocity){
     'use strict';
 
     var el = _gebi('tooltip'),
         tooltip = {};
 
-    tooltip.init = function(checkVersions, Velocity){
+    tooltip.init = function(checkVersions){
         this.checkVersions = checkVersions;
-        this.Velocity = Velocity;
     };
 
     tooltip.changeTooltipToFeature = function(featureDetails){
@@ -41,7 +40,7 @@ var tooltip = (function(){
                 self.changeTooltipToFeature(featureDetails);
                 if(newY) el.setAttribute('style', 'top:'+(newY)+'px;');
                 _el.addClass('is-visible');
-                self.Velocity(el, "scroll", { duration: 300, offset: -100 });
+                Velocity(el, "scroll", { duration: 300, offset: -100 });
             };
 
         switch(toState){
@@ -132,5 +131,5 @@ var tooltip = (function(){
 
     return tooltip;
 
-}());
+}(Velocity));
 

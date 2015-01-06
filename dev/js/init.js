@@ -2,7 +2,7 @@ function _gebi(id){
 	return document.getElementById(id);
 };
 
-(function(Browsercheck){
+(function(){
 	'use strict';
 
 	//versions to check if support is higher than
@@ -27,13 +27,13 @@ function _gebi(id){
 	browserSelects.init(featuresJSON, checkVersions);
 
 	//tooltip
-	tooltip.init(checkVersions[0], Velocity);
+	tooltip.init(checkVersions[0]);
 
 	//init resultsup
-	resultsUp.init(document.getElementsByClassName('code-wrapper')[0].offsetTop, codeEditor);
+	resultsUp.init(document.getElementsByClassName('code-wrapper')[0].offsetTop);
 
 	//browser check code on load
-	codeEditor.init(checkVersions[0], Browsercheck, tooltip, resultsUp);
+	codeEditor.init(checkVersions[0]);
 	codeEditor.browserCheckCode();
 
-}(window.Browsercheck));
+}());

@@ -1,27 +1,23 @@
-var codeEditor = (function(){
+var codeEditor = (function(Browsercheck, tooltip, resultsUp){
     'use strict';
 
     var codeInput = _gebi('code-input'),
         codeEditor = {};
 
-    codeEditor.init = function(checkVersions, Browsercheck, tooltip, resultsUp){
+    codeEditor.init = function(checkVersions){
         this.checkVersions = checkVersions;
-        this.Browsercheck = Browsercheck;
-        this.tooltip = tooltip;
-        this.resultsUp = resultsUp;
     };
 
     codeEditor.browserCheckCode = function(){
-        var results = this.browserCheckResults = this.Browsercheck.check(codeInput.innerText),
+        var results = this.browserCheckResults = Browsercheck.check(codeInput.innerText),
             parsedHtml = this.parseResultsInJsCode(results, codeInput.innerText),
-            self = this,
-            resultsUp = this.resultsUp;
+            self = this;
 
         //replace code with new html
         codeInput.innerHTML = parsedHtml;
 
         //hide tooltip
-        this.tooltip.tooltipChangeState({
+        tooltip.tooltipChangeState({
             action: 'hide'
         });
 
@@ -53,7 +49,7 @@ var codeEditor = (function(){
 
     codeEditor.openTooltipByAnchor = function(anchorEl){
         var featureDetails = this.browserCheckResults[anchorEl.getAttribute('data-status')][anchorEl.getAttribute('data-idx')];
-        self.tooltip.tooltipChangeState({
+        tooltip.tooltipChangeState({
             action: 'show',
             featureDetails: featureDetails,
             newY: anchorEl.offsetTop
@@ -93,4 +89,4 @@ var codeEditor = (function(){
 
     return codeEditor;
 
-}());
+}(Browsercheck, tooltip, resultsUp));
