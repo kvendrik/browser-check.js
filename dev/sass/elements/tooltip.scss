@@ -3,15 +3,15 @@
 
     position: absolute;
     right: $margin-l;
-    z-index: 2;
+    z-index: 1;
 
     margin-bottom: $margin-l;
 
-    width: 275px;
-    background-color: $grey-light;
-    @include border(false, $grey, $border-style-alt);
+    width: 270px;
+    background-color: darken($grey-light, 5%);
+    //@include border(false, $grey, $border-style-alt);
 
-    right: -275px;
+    right: -270px;
     @include transition(right);
     &.is-visible {
         right: $margin-l;

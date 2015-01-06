@@ -3,7 +3,7 @@ Do newspaper questions consulted sweetness do. Our sportsman his unwilling fulfi
 Now world own total saved <strong>above her</strong> cause table. Wicket myself her square remark the should far secure sex.
 Smiling cousins warrant law explain for whether. I aim to support:</p>
 <p>I aim to support:</p>
-<section id="selects-wrapper" class="selects-wrapper"></section></div></header><div class="container"><section class="results-up"><nav><a href="#" data-tab="passed" class="passed"><span class="ss-icon">check</span></a><a href="#" data-tab="failed" class="failed"><span class="ss-icon">delete</span></a></nav><ul data-tab="passed" class="passed"></ul><ul data-tab="failed" class="failed"></ul></section><section id="tooltip" class="tooltip"><header>{{explaination}}</header><div class="content"><p class="description">{{description}}</p><section class="support-overview">{{{supportOverview}}}</section><a href="{{link}}" target="_blank" class="overview-link">View full overview on caniuse.com</a></div></section></div><pre class="code-wrapper"><div id="code-input" contenteditable spellcheck="false" class="container">(function(){
+<section id="selects-wrapper" class="selects-wrapper"></section></div></header><div class="code-wrapper"><section id="results-up" class="results-up"><nav><a href="#" data-tab="passed" class="passed"><span class="ss-icon">check</span></a><a href="#" data-tab="failed" class="failed"><span class="ss-icon">delete</span></a></nav><ul data-tab="passed" class="passed"></ul><ul data-tab="failed" class="failed"></ul></section><section id="tooltip" class="tooltip"><header>{{explaination}}</header><div class="content"><p class="description">{{description}}</p><section class="support-overview">{{{supportOverview}}}</section><a href="{{link}}" target="_blank" class="overview-link">View full overview on caniuse.com</a></div></section><pre id="code-input" contenteditable spellcheck="false" class="container">(function(){
   window.addEventListener('devicelight', function(event) {
     console.log(event.value);
   });
@@ -28,5 +28,31 @@ Smiling cousins warrant law explain for whether. I aim to support:</p>
 
   reader.readAsText(file, encoding);
 }());
-</div></pre><script type="text/javascript" src="js/app.js"></script></body>
+
+(function(){
+  window.addEventListener('devicelight', function(event) {
+    console.log(event.value);
+  });
+
+
+  var encodedData = window.btoa("Hello, world"); // encode a string
+  var decodedData = window.atob(encodedData); // decode the string
+
+
+  var AudioContext = window.AudioContext || window.webkitAudioContext;
+  var audioCtx = new AudioContext();
+
+  var oscillatorNode = audioCtx.createOscillator();
+  var gainNode = audioCtx.createGain();
+  var finish = audioCtx.destination;
+
+
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var text = reader.result;
+  }
+
+  reader.readAsText(file, encoding);
+}());
+</pre></div><script type="text/javascript" src="js/app.js"></script></body>
 </html>

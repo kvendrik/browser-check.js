@@ -3770,7 +3770,7 @@ var featuresJSON = [{
   "description":"Method of manipulating file objects in web applications client-side, as well as programmatically selecting them and accessing their data.",
   "spec":"http://www.w3.org/TR/FileAPI/",
   "status":"wd",
-  "triggers": ["File", "FileReader", "FileList", "Blob"],
+  "triggers": ["File", "FileList"],
   "links":[
     {
       "url":"https://developer.mozilla.org/en/Using_files_from_web_applications",

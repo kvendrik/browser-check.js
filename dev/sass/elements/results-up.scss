@@ -1,10 +1,10 @@
 .results-up {
     font-size: $size-s;
 
-    position: fixed;
+    position: absolute;
     right: $margin-l;
     top: $margin-l;
-    z-index: 1;
+    z-index: 2;
 
     width: 270px;
 
@@ -15,6 +15,10 @@
     }
 
     line-height: 0;
+
+    &.is-sticky {
+        position: fixed;
+    }
 
     nav {
         width: 100%;
@@ -53,6 +57,9 @@
         width: 100%;
         margin: 0;
         display: none;
+
+        max-height: 8.5*40px;
+        overflow-y: auto;
 
         li {
             margin: 0;

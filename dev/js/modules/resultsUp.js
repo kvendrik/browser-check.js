@@ -2,30 +2,53 @@
 var resultsUp = (function(){
     'use strict';
 
-    var el = document.getElementsByClassName('results-up')[0],
-        navAnchors = el.getElementsByTagName('nav')[0].getElementsByTagName('a'),
+    var el = _gebi('results-up'),
         lastOpenTabEl,
-        lastOpenTabNavEl;
+        lastOpenTabNavEl,
+        resultsUp = {};
 
-    var resultsUp = {};
+    resultsUp.init = function(stickyBreakpointY, codeEditor){
 
-    resultsUp.init = function(){
+        var navAnchors = el.getElementsByTagName('nav')[0].getElementsByTagName('a'),
+            self = this,
+            _el = B(el);
+
+        this.codeEditor = codeEditor;
+
         //make nav work
         B.forEach(navAnchors, function(anchor){
             if(anchor.nodeType === 1){
-                B(anchor).click(function(){
-                    resultsUp.openTab(anchor.getAttribute('data-tab'));
+                B(anchor).click(function(e){
+                    e.preventDefault();
+                    self.openTab(anchor.getAttribute('data-tab'));
                 });
             }
         });
+
+        B(window).on('scroll', function(){
+            var scrollTop = (window.pageYOffset || document.documentElement.scrollTop) - (document.documentElement.clientTop || 0);
+            if(scrollTop >= (stickyBreakpointY)){
+                _el.addClass('is-sticky');
+            } else {
+                _el.removeClass('is-sticky');
+            }
+        });
+
+        this.openFirstTab();
+
     };
 
-    resultsUp.open = function(){
+    resultsUp.open = function(options){
+        var _el = B(el);
+
         var openResultsUp = function(){
+            if(typeof options.beforeVisible === 'function'){
+                options.beforeVisible();
+            }
+
             _el.addClass('is-visible');
         };
 
-        var _el = B(el);
         if(_el.hasClass('is-visible')){
             _el.removeClass('is-visible');
             setTimeout(openResultsUp, 300);
@@ -35,6 +58,7 @@ var resultsUp = (function(){
     };
 
     resultsUp.constructTabs = function(browserCheckResults){
+        var self = this;
         B(el).find('ul').each(function(list){
             list.innerHTML = '';
 
@@ -42,15 +66,28 @@ var resultsUp = (function(){
                 statusResults = browserCheckResults[status],
                 listItems = document.createDocumentFragment();
 
-            var createItem = function(contents){
+            var createItem = function(contents, arrIdx){
                 var el = document.createElement('li');
                 el.innerText = contents;
+
+                el.setAttribute('data-status', status);
+                el.setAttribute('data-idx', arrIdx);
+
+                B(el).click(function(e){
+                    e.preventDefault();
+
+                    var el = e.target,
+                        anchor = self.codeEditor.getAnchorByStatusAndIdx(el.getAttribute('data-status'), el.getAttribute('data-idx'));
+
+                    self.codeEditor.openTooltipByAnchor(anchor);
+                });
+
                 listItems.appendChild(el);
             };
 
             if(statusResults.length > 0){
-                B.forEach(statusResults, function(featureDetails){
-                    createItem(featureDetails.title);
+                B.forEach(statusResults, function(featureDetails, idx){
+                    createItem(featureDetails.title, idx);
                 });
             } else {
                 createItem('None '+status);
@@ -61,8 +98,10 @@ var resultsUp = (function(){
     };
 
     resultsUp.openTab = function(tabName){
+        var resultsEl = el;
+
         var getElByTagNameAndAttr = function(tagName, attrName){
-            var els = el.getElementsByTagName(tagName);
+            var els = resultsEl.getElementsByTagName(tagName);
 
             for(var i = 0; i < els.length; i++){
                 var el = els[i];

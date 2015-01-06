@@ -1,34 +1,32 @@
 var tooltip = (function(){
     'use strict';
 
-    var tooltip = {};
+    var el = _gebi('tooltip'),
+        tooltip = {};
 
-    tooltip.init = function(checkVersions, tooltipEl){
+    tooltip.init = function(checkVersions, Velocity){
         this.checkVersions = checkVersions;
-        this.tooltip = {
-            el: tooltipEl,
-            childs: {
-                explaination: tooltipEl.getElementsByTagName('header')[0],
-                description: tooltipEl.getElementsByClassName('description')[0],
-                supportOverview: tooltipEl.getElementsByClassName('support-overview')[0],
-                overviewLink: tooltipEl.getElementsByClassName('overview-link')[0]
-            }
-        };
+        this.Velocity = Velocity;
     };
 
     tooltip.changeTooltipToFeature = function(featureDetails){
-        var tooltip = this.tooltip;
+        var _el = B(el),
+            childs = {
+                explaination: el.getElementsByTagName('header')[0],
+                description: el.getElementsByClassName('description')[0],
+                supportOverview: el.getElementsByClassName('support-overview')[0],
+                overviewLink: el.getElementsByClassName('overview-link')[0]
+            };
 
-        var _el = B(tooltip.el);
         _el.removeClass('passed');
         _el.removeClass('failed');
         _el.addClass(featureDetails.status);
 
-        tooltip.childs.explaination.innerText = featureDetails.explaination;
-        tooltip.childs.description.innerText = featureDetails.description;
-        tooltip.childs.supportOverview.innerHTML = '';
-        tooltip.childs.supportOverview.appendChild(this.constructSupportOverview(featureDetails.stats));
-        tooltip.childs.overviewLink.setAttribute('href', 'http://caniuse.com/#search='+featureDetails.title);
+        childs.explaination.innerText = featureDetails.explaination;
+        childs.description.innerText = featureDetails.description;
+        childs.supportOverview.innerHTML = '';
+        childs.supportOverview.appendChild(this.constructSupportOverview(featureDetails.stats));
+        childs.overviewLink.setAttribute('href', 'http://caniuse.com/#search='+featureDetails.title);
     };
 
     tooltip.tooltipChangeState = function(options){
@@ -37,13 +35,13 @@ var tooltip = (function(){
             featureDetails = options.featureDetails,
             newY = options.newY;
 
-        var tooltipEl = this.tooltip.el,
-            _el = B(tooltipEl),
+        var _el = B(el),
             self = this,
             showTooltip = function(){
                 self.changeTooltipToFeature(featureDetails);
-                if(newY) tooltipEl.setAttribute('style', 'top:'+(newY)+'px;');
+                if(newY) el.setAttribute('style', 'top:'+(newY)+'px;');
                 _el.addClass('is-visible');
+                self.Velocity(el, "scroll", { duration: 300, offset: -100 });
             };
 
         switch(toState){

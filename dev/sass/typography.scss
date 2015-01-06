@@ -68,15 +68,18 @@ select {
     padding-right: $margin-m;
     text-transform: capitalize;
 
+    position: relative;
+    z-index: 1;
+
     &:focus {
         outline: none;
     }
 
-    &+span {
+    & + .ss-icon {
         font-size: .5em;
         margin-left: -15px;
         position: relative;
-        z-index: -1;
+        z-index: 0;
         top: -1px;
     }
 }

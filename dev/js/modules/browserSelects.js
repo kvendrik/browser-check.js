@@ -6,21 +6,24 @@ var browserSelects = (function(){
 
     browserSelects.init = function(featuresJSON, checkVersions){
 
+        this.checkVersions = checkVersions;
+
         //construct the selects
-        var selects = this.constructBrowserSelects(featuresJSON[0].stats, checkVersions);
+        var selects = this.constructBrowserSelects(featuresJSON[0].stats);
 
         //add selects to DOM
         _gebi('selects-wrapper').appendChild(selects);
 
     };
 
-    browserSelects.constructBrowserSelects = function(browsersJson, checkVersions){
+    browserSelects.constructBrowserSelects = function(browsersJson){
 
         var frag = document.createDocumentFragment();
 
         //loop browsers, construct select
-        B.forEach(checkVersions, function(defaultVersion, browserName){
-            frag.appendChild(browserSelects.constructSelect(defaultVersion, browserName, browsersJson));
+        B.forEach(this.checkVersions[0], function(defaultVersion, browserName){
+            var el = browserSelects.constructSelect(defaultVersion, browserName, browsersJson);
+            frag.appendChild(el);
         });
 
         return frag;
@@ -30,14 +33,15 @@ var browserSelects = (function(){
     browserSelects.constructSelect = function(defaultVersion, browserName, browsersJson){
         var frag = document.createDocumentFragment(),
             select = document.createElement('select'),
-            icon;
+            icon,
+            self = this;
 
         var onSelectChange = function(e){
             var options = this.getElementsByTagName('option');
 
             B.forEach(options, function(option){
                 if(option.selected){
-                    checkVersions.set(option.getAttribute('data-browser-name'), Number(option.getAttribute('data-browser-version')));
+                    self.checkVersions.set(option.getAttribute('data-browser-name'), Number(option.getAttribute('data-browser-version')));
                 }
             });
         };
@@ -49,7 +53,8 @@ var browserSelects = (function(){
         //add option for each browser version
         B.forEach(browsersJson[browserName], function(support, version){
             if(isNaN(version)) return;
-            select.appendChild(browserSelects.constructVersionOption(version.match(/[\d\.]+/)[0], defaultVersion, browserName));
+            var optionEl = self.constructVersionOption(version.match(/[\d\.]+/)[0], defaultVersion, browserName);
+            select.appendChild(optionEl);
         });
 
         //add select to frag

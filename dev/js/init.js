@@ -1,8 +1,8 @@
-var _gebi = function(id){
+function _gebi(id){
 	return document.getElementById(id);
 };
 
-(function(UI, Browsercheck){
+(function(Browsercheck){
 	'use strict';
 
 	//versions to check if support is higher than
@@ -16,28 +16,24 @@ var _gebi = function(id){
 		android: 4.1
 	});
 
-	//create shorthands
-	var tooltipEl = _gebi('tooltip');
-
-	//construct new instance of classes
-	//classes only read from checkVersions
-	//which is why passing only the raw object is okay
-	UI = new UI(checkVersions[0], tooltipEl);
 	Browsercheck = new Browsercheck(featuresJSON, checkVersions[0]);
 
 	//listen for checkVersions changes
 	checkVersions.on('change', function(details){
-		codeEditor.browserCheckCode(codeInput);
+		codeEditor.browserCheckCode();
 	});
 
 	//init browser selects
-	browserSelects.init(featuresJSON, checkVersions[0]);
+	browserSelects.init(featuresJSON, checkVersions);
+
+	//tooltip
+	tooltip.init(checkVersions[0], Velocity);
 
 	//init resultsup
-	resultsUp.init(checkVersions);
+	resultsUp.init(document.getElementsByClassName('code-wrapper')[0].offsetTop, codeEditor);
 
 	//browser check code on load
-	codeEditor.init();
+	codeEditor.init(checkVersions[0], Browsercheck, tooltip, resultsUp);
 	codeEditor.browserCheckCode();
 
-}(window.UI, window.Browsercheck));
+}(window.Browsercheck));
