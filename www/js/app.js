@@ -6255,7 +6255,7 @@ window.Browsercheck = Browsercheck;
 
 }());
 //add the selects
-var browserSelects = (function(){
+var browserSelects = (function(B){
     'use strict';
 
     var browserSelects = {};
@@ -6345,8 +6345,8 @@ var browserSelects = (function(){
 
     return browserSelects;
 
-}());
-var codeEditor = (function(){
+}(B));
+var codeEditor = (function(B){
     'use strict';
 
     var codeInput = _gebi('code-input'),
@@ -6362,8 +6362,7 @@ var codeEditor = (function(){
     codeEditor.browserCheckCode = function(){
         var results = this.browserCheckResults = this.Browsercheck.check(codeInput.innerText),
             parsedHtml = this.parseResultsInJsCode(results, codeInput.innerText),
-            self = this,
-            resultsUp = this.resultsUp;
+            self = this;
 
         //replace code with new html
         codeInput.innerHTML = parsedHtml;
@@ -6377,9 +6376,9 @@ var codeEditor = (function(){
         this.addListenersToTooltipAnchors();
 
         //open results
-        resultsUp.open({
+        this.resultsUp.open({
             beforeVisible: function(){
-                resultsUp.constructTabs(results);
+                self.resultsUp.constructTabs(results);
             }
         });
     };
@@ -6401,7 +6400,7 @@ var codeEditor = (function(){
 
     codeEditor.openTooltipByAnchor = function(anchorEl){
         var featureDetails = this.browserCheckResults[anchorEl.getAttribute('data-status')][anchorEl.getAttribute('data-idx')];
-        self.tooltip.tooltipChangeState({
+        this.tooltip.tooltipChangeState({
             action: 'show',
             featureDetails: featureDetails,
             newY: anchorEl.offsetTop
@@ -6441,9 +6440,9 @@ var codeEditor = (function(){
 
     return codeEditor;
 
-}());
+}(B));
 //Results up
-var resultsUp = (function(){
+var resultsUp = (function(B){
     'use strict';
 
     var el = _gebi('results-up'),
@@ -6451,11 +6450,10 @@ var resultsUp = (function(){
         lastOpenTabNavEl,
         resultsUp = {};
 
-    resultsUp.init = function(stickyBreakpointY, codeEditor){
+    resultsUp.init = function(codeEditor){
 
         var navAnchors = el.getElementsByTagName('nav')[0].getElementsByTagName('a'),
-            self = this,
-            _el = B(el);
+            self = this;
 
         this.codeEditor = codeEditor;
 
@@ -6469,14 +6467,14 @@ var resultsUp = (function(){
             }
         });
 
-        B(window).on('scroll', function(){
-            var scrollTop = (window.pageYOffset || document.documentElement.scrollTop) - (document.documentElement.clientTop || 0);
-            if(scrollTop >= (stickyBreakpointY)){
-                _el.addClass('is-sticky');
-            } else {
-                _el.removeClass('is-sticky');
-            }
-        });
+        // B(window).on('scroll', function(){
+        //     var scrollTop = (window.pageYOffset || document.documentElement.scrollTop) - (document.documentElement.clientTop || 0);
+        //     if(scrollTop >= (stickyBreakpointY)){
+        //         _el.addClass('is-sticky');
+        //     } else {
+        //         _el.removeClass('is-sticky');
+        //     }
+        // });
 
         this.openFirstTab();
 
@@ -6578,16 +6576,15 @@ var resultsUp = (function(){
     };
 
     return resultsUp;
-}());
-var tooltip = (function(){
+}(B));
+var tooltip = (function(B, Velocity){
     'use strict';
 
     var el = _gebi('tooltip'),
         tooltip = {};
 
-    tooltip.init = function(checkVersions, Velocity){
+    tooltip.init = function(checkVersions){
         this.checkVersions = checkVersions;
-        this.Velocity = Velocity;
     };
 
     tooltip.changeTooltipToFeature = function(featureDetails){
@@ -6622,7 +6619,7 @@ var tooltip = (function(){
                 self.changeTooltipToFeature(featureDetails);
                 if(newY) el.setAttribute('style', 'top:'+(newY)+'px;');
                 _el.addClass('is-visible');
-                self.Velocity(el, "scroll", { duration: 300, offset: -100 });
+                Velocity(el, "scroll", { duration: 300, offset: -100 });
             };
 
         switch(toState){
@@ -6713,14 +6710,14 @@ var tooltip = (function(){
 
     return tooltip;
 
-}());
+}(B, Velocity));
 
 
 function _gebi(id){
 	return document.getElementById(id);
 };
 
-(function(Browsercheck){
+(function(){
 	'use strict';
 
 	//versions to check if support is higher than
@@ -6734,7 +6731,7 @@ function _gebi(id){
 		android: 4.1
 	});
 
-	Browsercheck = new Browsercheck(featuresJSON, checkVersions[0]);
+	var Browserchecker = new Browsercheck(featuresJSON, checkVersions[0]);
 
 	//listen for checkVersions changes
 	checkVersions.on('change', function(details){
@@ -6745,13 +6742,13 @@ function _gebi(id){
 	browserSelects.init(featuresJSON, checkVersions);
 
 	//tooltip
-	tooltip.init(checkVersions[0], Velocity);
+	tooltip.init(checkVersions[0]);
 
 	//init resultsup
-	resultsUp.init(document.getElementsByClassName('code-wrapper')[0].offsetTop, codeEditor);
+	resultsUp.init(codeEditor);
 
 	//browser check code on load
-	codeEditor.init(checkVersions[0], Browsercheck, tooltip, resultsUp);
+	codeEditor.init(checkVersions[0], Browserchecker, tooltip, resultsUp);
 	codeEditor.browserCheckCode();
 
-}(window.Browsercheck));
+}());

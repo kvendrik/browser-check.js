@@ -16,7 +16,7 @@ function _gebi(id){
 		android: 4.1
 	});
 
-	Browsercheck = new Browsercheck(featuresJSON, checkVersions[0]);
+	var Browserchecker = new Browsercheck(featuresJSON, checkVersions[0]);
 
 	//listen for checkVersions changes
 	checkVersions.on('change', function(details){
@@ -30,10 +30,10 @@ function _gebi(id){
 	tooltip.init(checkVersions[0]);
 
 	//init resultsup
-	resultsUp.init(document.getElementsByClassName('code-wrapper')[0].offsetTop);
+	resultsUp.init(codeEditor);
 
 	//browser check code on load
-	codeEditor.init(checkVersions[0]);
+	codeEditor.init(checkVersions[0], Browserchecker, tooltip, resultsUp);
 	codeEditor.browserCheckCode();
 
 }());

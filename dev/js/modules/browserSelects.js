@@ -1,5 +1,5 @@
 //add the selects
-var browserSelects = (function(){
+var browserSelects = (function(B){
     'use strict';
 
     var browserSelects = {};
@@ -89,4 +89,4 @@ var browserSelects = (function(){
 
     return browserSelects;
 
-}());
+}(B));

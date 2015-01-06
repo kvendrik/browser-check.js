@@ -2,3 +2,4 @@
 .dropbox
 Icon
 node_modules/
+.sass_cache/

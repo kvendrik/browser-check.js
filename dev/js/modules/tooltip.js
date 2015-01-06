@@ -1,4 +1,4 @@
-var tooltip = (function(Velocity){
+var tooltip = (function(B, Velocity){
     'use strict';
 
     var el = _gebi('tooltip'),
@@ -131,5 +131,5 @@ var tooltip = (function(Velocity){
 
     return tooltip;
 
-}(Velocity));
+}(B, Velocity));
 

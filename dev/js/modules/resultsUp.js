@@ -1,5 +1,5 @@
 //Results up
-var resultsUp = (function(codeEditor){
+var resultsUp = (function(B){
     'use strict';
 
     var el = _gebi('results-up'),
@@ -7,11 +7,12 @@ var resultsUp = (function(codeEditor){
         lastOpenTabNavEl,
         resultsUp = {};
 
-    resultsUp.init = function(stickyBreakpointY){
+    resultsUp.init = function(codeEditor){
 
         var navAnchors = el.getElementsByTagName('nav')[0].getElementsByTagName('a'),
-            self = this,
-            _el = B(el);
+            self = this;
+
+        this.codeEditor = codeEditor;
 
         //make nav work
         B.forEach(navAnchors, function(anchor){
@@ -23,14 +24,14 @@ var resultsUp = (function(codeEditor){
             }
         });
 
-        B(window).on('scroll', function(){
-            var scrollTop = (window.pageYOffset || document.documentElement.scrollTop) - (document.documentElement.clientTop || 0);
-            if(scrollTop >= (stickyBreakpointY)){
-                _el.addClass('is-sticky');
-            } else {
-                _el.removeClass('is-sticky');
-            }
-        });
+        // B(window).on('scroll', function(){
+        //     var scrollTop = (window.pageYOffset || document.documentElement.scrollTop) - (document.documentElement.clientTop || 0);
+        //     if(scrollTop >= (stickyBreakpointY)){
+        //         _el.addClass('is-sticky');
+        //     } else {
+        //         _el.removeClass('is-sticky');
+        //     }
+        // });
 
         this.openFirstTab();
 
@@ -56,6 +57,7 @@ var resultsUp = (function(codeEditor){
     };
 
     resultsUp.constructTabs = function(browserCheckResults){
+        var self = this;
         B(el).find('ul').each(function(list){
             list.innerHTML = '';
 
@@ -74,9 +76,9 @@ var resultsUp = (function(codeEditor){
                     e.preventDefault();
 
                     var el = e.target,
-                        anchor = codeEditor.getAnchorByStatusAndIdx(el.getAttribute('data-status'), el.getAttribute('data-idx'));
+                        anchor = self.codeEditor.getAnchorByStatusAndIdx(el.getAttribute('data-status'), el.getAttribute('data-idx'));
 
-                    codeEditor.openTooltipByAnchor(anchor);
+                    self.codeEditor.openTooltipByAnchor(anchor);
                 });
 
                 listItems.appendChild(el);
@@ -131,4 +133,4 @@ var resultsUp = (function(codeEditor){
     };
 
     return resultsUp;
-}(codeEditor));
+}(B));

@@ -1,15 +1,18 @@
-var codeEditor = (function(Browsercheck, tooltip, resultsUp){
+var codeEditor = (function(B){
     'use strict';
 
     var codeInput = _gebi('code-input'),
         codeEditor = {};
 
-    codeEditor.init = function(checkVersions){
+    codeEditor.init = function(checkVersions, Browsercheck, tooltip, resultsUp){
         this.checkVersions = checkVersions;
+        this.Browsercheck = Browsercheck;
+        this.tooltip = tooltip;
+        this.resultsUp = resultsUp;
     };
 
     codeEditor.browserCheckCode = function(){
-        var results = this.browserCheckResults = Browsercheck.check(codeInput.innerText),
+        var results = this.browserCheckResults = this.Browsercheck.check(codeInput.innerText),
             parsedHtml = this.parseResultsInJsCode(results, codeInput.innerText),
             self = this;
 
@@ -17,7 +20,7 @@ var codeEditor = (function(Browsercheck, tooltip, resultsUp){
         codeInput.innerHTML = parsedHtml;
 
         //hide tooltip
-        tooltip.tooltipChangeState({
+        this.tooltip.tooltipChangeState({
             action: 'hide'
         });
 
@@ -25,9 +28,9 @@ var codeEditor = (function(Browsercheck, tooltip, resultsUp){
         this.addListenersToTooltipAnchors();
 
         //open results
-        resultsUp.open({
+        this.resultsUp.open({
             beforeVisible: function(){
-                resultsUp.constructTabs(results);
+                self.resultsUp.constructTabs(results);
             }
         });
     };
@@ -49,7 +52,7 @@ var codeEditor = (function(Browsercheck, tooltip, resultsUp){
 
     codeEditor.openTooltipByAnchor = function(anchorEl){
         var featureDetails = this.browserCheckResults[anchorEl.getAttribute('data-status')][anchorEl.getAttribute('data-idx')];
-        tooltip.tooltipChangeState({
+        this.tooltip.tooltipChangeState({
             action: 'show',
             featureDetails: featureDetails,
             newY: anchorEl.offsetTop
@@ -89,4 +92,4 @@ var codeEditor = (function(Browsercheck, tooltip, resultsUp){
 
     return codeEditor;
 
-}(Browsercheck, tooltip, resultsUp));
+}(B));
