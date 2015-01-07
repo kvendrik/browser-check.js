@@ -4,8 +4,9 @@ var tooltip = (function(B, Velocity){
     var el = _gebi('tooltip'),
         tooltip = {};
 
-    tooltip.init = function(checkVersions){
+    tooltip.init = function(checkVersions, resultsUp){
         this.checkVersions = checkVersions;
+        this.resultsUp = resultsUp;
     };
 
     tooltip.changeTooltipToFeature = function(featureDetails){
@@ -41,6 +42,7 @@ var tooltip = (function(B, Velocity){
                 if(newY) el.setAttribute('style', 'top:'+(newY)+'px;');
                 _el.addClass('is-visible');
                 Velocity(el, "scroll", { duration: 300, offset: -100 });
+                self.resultsUp.minify();
             };
 
         switch(toState){

@@ -1,5 +1,5 @@
 //Border
-@mixin border($side:false, $color:$grey, $border-style:$border-style){
+@mixin border($side:false, $color:$grey-light, $border-style:$border-style){
   @if $side {
     border-#{$side}: $border-style $border-width $color;
   } @else {
@@ -7,12 +7,41 @@
   }
 }
 
+//Prefix property
+@mixin prefix($property, $value){
+    -webkit-#{$property}: $value;
+    -moz-#{$property}: $value;
+    -o-#{$property}: $value;
+    -ms-#{$property}: $value;
+    #{$property}: $value;
+}
+
 //Transition
-@mixin transition($property, $duration:$transition-duration, $timing:$transition-timing, $delay:0s){
-  transition: $property $duration $timing $delay;
+@mixin transition($property, $duration:$transition-duration, $timing:$transition-timing,  $delay:0s){
+    @include prefix(transition, $property $duration $timing $delay);
 }
 
 //Animations
-@mixin animation($name, $seconds:$transition-duration, $delay:0s){
-  animation: $name $seconds infinite alternate $delay;
+@mixin animation($name, $seconds, $delay:0s){
+    @include prefix(animation, $name $seconds infinite alternate $delay);
+}
+
+@mixin keyframes($name){
+    @-webkit-keyframes $name {
+      @content;
+    }
+    @-moz-keyframes $name {
+      @content;
+    }
+    @-o-keyframes $name {
+      @content;
+    }
+    @keyframes $name {
+      @content;
+    }
+}
+
+//Transforms
+@mixin transform($value){
+    @include prefix(transform, $value);
 }

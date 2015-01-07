@@ -7,12 +7,13 @@ var resultsUp = (function(B){
         lastOpenTabNavEl,
         resultsUp = {};
 
-    resultsUp.init = function(codeEditor){
+    resultsUp.init = function(codeEditor, tooltip){
 
         var navAnchors = el.getElementsByTagName('nav')[0].getElementsByTagName('a'),
             self = this;
 
         this.codeEditor = codeEditor;
+        this.tooltip = tooltip;
 
         //make nav work
         B.forEach(navAnchors, function(anchor){
@@ -24,28 +25,39 @@ var resultsUp = (function(B){
             }
         });
 
-        // B(window).on('scroll', function(){
-        //     var scrollTop = (window.pageYOffset || document.documentElement.scrollTop) - (document.documentElement.clientTop || 0);
-        //     if(scrollTop >= (stickyBreakpointY)){
-        //         _el.addClass('is-sticky');
-        //     } else {
-        //         _el.removeClass('is-sticky');
-        //     }
-        // });
+        //make minification work
+        var _minifyTrigger = B(el.getElementsByClassName('minify-trigger')[0]);
+        _minifyTrigger.click(function(e){
+            e.preventDefault();
+
+            if(B(el).hasClass('is-minified')){
+                self.open();
+            } else {
+                self.minify();
+            }
+        });
 
         this.openFirstTab();
 
     };
 
     resultsUp.open = function(options){
-        var _el = B(el);
+        var _el = B(el),
+            self = this;
 
         var openResultsUp = function(){
-            if(typeof options.beforeVisible === 'function'){
+            if(options && typeof options.beforeVisible === 'function'){
                 options.beforeVisible();
             }
 
+            if(_el.hasClass('is-minified')){
+                _el.removeClass('is-minified');
+            }
+
             _el.addClass('is-visible');
+            self.tooltip.tooltipChangeState({
+                action: 'hide'
+            });
         };
 
         if(_el.hasClass('is-visible')){
@@ -54,6 +66,16 @@ var resultsUp = (function(B){
         } else {
             openResultsUp();
         }
+    };
+
+    resultsUp.minify = function(){
+        var _el = B(el);
+
+        if(_el.hasClass('is-visible')){
+            _el.removeClass('is-visible');
+        }
+
+        _el.addClass('is-minified');
     };
 
     resultsUp.constructTabs = function(browserCheckResults){

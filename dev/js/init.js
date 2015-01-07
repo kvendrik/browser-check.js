@@ -27,10 +27,10 @@ function _gebi(id){
 	browserSelects.init(featuresJSON, checkVersions);
 
 	//tooltip
-	tooltip.init(checkVersions[0]);
+	tooltip.init(checkVersions[0], resultsUp);
 
 	//init resultsup
-	resultsUp.init(codeEditor);
+	resultsUp.init(codeEditor, tooltip);
 
 	//browser check code on load
 	codeEditor.init(checkVersions[0], Browserchecker, tooltip, resultsUp);
