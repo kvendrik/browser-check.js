@@ -3,9 +3,7 @@
 
     position: absolute;
     right: $margin-l;
-    z-index: 1;
-
-    margin-bottom: $margin-l;
+    z-index: 2;
 
     width: 270px;
     background-color: darken($grey-light, 5%);

@@ -26,6 +26,7 @@
     @include prefix(animation, $name $seconds infinite alternate $delay);
 }
 
+//Keyframes
 @mixin keyframes($name){
     @-webkit-keyframes $name {
       @content;

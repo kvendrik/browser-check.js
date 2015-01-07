@@ -1,4 +1,4 @@
-var codeEditor = (function(B){
+var codeEditor = (function(B, Prism){
     'use strict';
 
     var codeInput = _gebi('code-input'),
@@ -13,13 +13,14 @@ var codeEditor = (function(B){
         var self = this;
         B(_gebi('check-trigger')).click(function(e){
             e.preventDefault();
+            Prism.highlightElement(codeInput);
             self.browserCheckCode();
         });
     };
 
     codeEditor.browserCheckCode = function(){
         var results = this.browserCheckResults = this.Browsercheck.check(codeInput.innerText),
-            parsedHtml = this.parseResultsInJsCode(results, codeInput.innerText),
+            parsedHtml = this.parseResultsInJsCode(results, codeInput.innerHTML),
             self = this;
 
         //replace code with new html
@@ -93,8 +94,8 @@ var codeEditor = (function(B){
         B.forEach(checkResults, function(features, status){
             B.forEach(features, function(featureDetails, idx){
 
-                jsCode = jsCode.replace(new RegExp(featureDetails.foundTrigger+'([\'\"\(\s])', 'g'), function(match, nextChar){
-                    return '<a class="tooltip-trigger '+status+'" data-status="'+status+'" data-idx="'+idx+'">'+featureDetails.foundTrigger+'</a>'+nextChar;
+                jsCode = jsCode.replace(new RegExp(featureDetails.foundTrigger+'([\<\w\s\/\>]+(.*)?class\=\"token[^\"]+\"[\<\w\s\/\>]+)?[\'\"\(\s]', 'g'), function(match){
+                    return match.replace(featureDetails.foundTrigger, '<a class="tooltip-trigger '+status+'" data-status="'+status+'" data-idx="'+idx+'">'+featureDetails.foundTrigger+'</a>');
                 });
 
             });
@@ -105,4 +106,4 @@ var codeEditor = (function(B){
 
     return codeEditor;
 
-}(B));
+}(B, Prism));

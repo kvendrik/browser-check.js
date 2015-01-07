@@ -2,41 +2,50 @@
     width: 100%;
 
     @include border(top, $grey, $border-style-alt);
-    background: $grey-light;
 
-    padding: $margin-l 0;
+    background-color: $grey-light;
 
     position: relative;
+    overflow: hidden;
+
+    .container {
+        width: $wide-container-width;
+        position: relative;
+    }
 
     .check-trigger {
         position: absolute;
         top: 0;
         right: $margin-l;
+        z-index: 1;
     }
 
-    .container {
-        width: $wide-container-width;
+    pre {
+        line-height: 1.6em;
+        padding: $margin-l 0;
 
-        &:focus {
-            outline: none;
-        }
-
-        a {
-            cursor: pointer;
-            &.failed,&.failed:hover {
-                color: $red;
-                border-color: $red;
-
-                &.is-active {
-                    background-color: lighten($red, 40%);
-                }
+        code {
+            &:focus {
+                outline: none;
             }
-            &.passed,&.passed:hover {
-                color: $green;
-                border-color: $green;
 
-                &.is-active {
-                    background-color: lighten($green, 40%);
+            a {
+                cursor: pointer;
+                &.failed,&.failed:hover {
+                    color: $red;
+                    border-color: $red;
+
+                    &.is-active {
+                        background-color: lighten($red, 40%);
+                    }
+                }
+                &.passed,&.passed:hover {
+                    color: $green;
+                    border-color: $green;
+
+                    &.is-active {
+                        background-color: lighten($green, 40%);
+                    }
                 }
             }
         }
