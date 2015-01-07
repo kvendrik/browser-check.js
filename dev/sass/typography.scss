@@ -3,7 +3,7 @@ h1,h2,h3,h4,h5,h6,p,pre,ul,ol {
     padding: 0;
 }
 
-h1,h2,h3,h4,h5,h6,p {
+h1,h2,h3,h4,h5,h6,p, ol {
     margin-bottom: $margin-m;
 }
 
@@ -42,6 +42,10 @@ u {
 
 small {
     font-size: $size-s;
+}
+
+ol {
+    margin-left: 20px;
 }
 
 a {

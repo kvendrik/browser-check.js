@@ -10,11 +10,31 @@ var codeEditor = (function(B, Prism){
         this.tooltip = tooltip;
         this.resultsUp = resultsUp;
 
-        var self = this;
-        B(_gebi('check-trigger')).click(function(e){
+        this.initCheckTrigger();
+    };
+
+    codeEditor.initCheckTrigger = function(){
+        //get el
+        var _checkTrigger = B(_gebi('check-trigger')),
+            codeWrapperOffset = document.getElementsByClassName('code-wrapper')[0].offsetTop,
+            self = this;
+
+        //append listener
+        _checkTrigger.click(function(e){
             e.preventDefault();
             Prism.highlightElement(codeInput);
             self.browserCheckCode();
+        });
+
+        //make sticky when in editor
+        B(window).on('scroll', function(){
+            var offsetTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+            
+            if(offsetTop > codeWrapperOffset){
+                _checkTrigger.addClass('is-sticky');
+            } else {
+                _checkTrigger.removeClass('is-sticky');
+            }
         });
     };
 

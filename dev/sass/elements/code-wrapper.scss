@@ -1,16 +1,17 @@
 .code-wrapper {
     width: 100%;
+    min-height: 100%;
 
     @include border(top, $grey, $border-style-alt);
 
     background-color: $grey-light;
 
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
 
     .container {
         width: $wide-container-width;
-        position: relative;
+        //position: relative;
     }
 
     .check-trigger {
@@ -18,6 +19,10 @@
         top: 0;
         right: $margin-l;
         z-index: 1;
+
+        &.is-sticky {
+            position: fixed;
+        }
     }
 
     pre {
