@@ -36,7 +36,7 @@
 
             a {
                 cursor: pointer;
-                &.failed,&.failed:hover {
+                &.failed,&.failed:hover, &.failed span,&.failed span:hover {
                     color: $red;
                     border-color: $red;
 
@@ -44,7 +44,7 @@
                         background-color: lighten($red, 40%);
                     }
                 }
-                &.passed,&.passed:hover {
+                &.passed,&.passed:hover, &.passed span,&.passed span:hover {
                     color: $green;
                     border-color: $green;
 

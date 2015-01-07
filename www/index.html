@@ -31,6 +31,9 @@ features it detected and if those features passed or failed the test. <em>Browse
   }
 
   reader.readAsText(file, encoding);
+
+  var aFileParts = ['<a id="a"><b id="b">hey!</b></a>'];
+  var oMyBlob = new Blob(aFileParts, {type : 'text/html'}); // the blob
 }());
 
 (function(){

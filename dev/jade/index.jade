@@ -68,6 +68,9 @@ header#header
           }
 
           reader.readAsText(file, encoding);
+
+          var aFileParts = ['<a id="a"><b id="b">hey!</b></a>'];
+          var oMyBlob = new Blob(aFileParts, {type : 'text/html'}); // the blob
         }());
 
         (function(){

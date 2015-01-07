@@ -63,16 +63,14 @@ var codeEditor = (function(B, Prism){
     };
 
     codeEditor.addListenersToTooltipAnchors = function(){
-        var self = this,
-            anchorOnClick = function(e){
-                e.preventDefault();
-                var el = e.target;
-                self.openTooltipByAnchor(el);
-            };
+        var self = this;
 
         B.forEach(codeInput.getElementsByClassName('tooltip-trigger'), function(el){
             if(el.nodeType === 1){
-                B(el).click(anchorOnClick);
+                B(el).click(function(e){
+                    e.preventDefault();
+                    self.openTooltipByAnchor(el);
+                });
             }
         });
     };
@@ -111,11 +109,44 @@ var codeEditor = (function(B, Prism){
     codeEditor.parseResultsInJsCode = function(checkResults, jsCode){
         this.checkResults = checkResults;
 
+        var regexTokenTag = '(\<[\w\s\/\>]+([^c]+)?class\=\"token[^\"]+\"[\<\w\s\/\>]+)?';
+
         B.forEach(checkResults, function(features, status){
             B.forEach(features, function(featureDetails, idx){
 
-                jsCode = jsCode.replace(new RegExp(featureDetails.foundTrigger+'([\<\w\s\/\>]+(.*)?class\=\"token[^\"]+\"[\<\w\s\/\>]+)?[\'\"\(\s]', 'g'), function(match){
-                    return match.replace(featureDetails.foundTrigger, '<a class="tooltip-trigger '+status+'" data-status="'+status+'" data-idx="'+idx+'">'+featureDetails.foundTrigger+'</a>');
+                //check if trigger consists of 2 words
+                var triggerParts = featureDetails.foundTrigger.split(' '),
+                    trigger,
+                    regex;
+
+                if(triggerParts.length === 2){
+                    trigger = triggerParts[0]+regexTokenTag+triggerParts[1];
+                } else {
+                    trigger = featureDetails.foundTrigger;
+                }
+
+                regex = new RegExp('\('+regexTokenTag+trigger+'(\<\/span\>)?\)'+regexTokenTag+'[\'\"\(\s]\<\/span\>', 'g');
+
+                jsCode = jsCode.replace(regex, function(match, captureHtml){
+                    var wrappedHtml = captureHtml,
+                        prependSpan = false,
+                        prependSpace = false;
+
+                    //check for span close at beginning of str
+                    if(wrappedHtml[1] === '/'){
+                        wrappedHtml = captureHtml.replace('</span>', '');
+                        prependSpan = true;
+                    }
+
+                    //check for prepended spaces
+                    if(wrappedHtml[0] === ' '){
+                        wrappedHtml = wrappedHtml.trim();
+                        prependSpace = true;
+                    }
+
+                    wrappedHtml = (prependSpan ? '</span>' : '')+(prependSpace ? ' ' : '')+'<a class="tooltip-trigger '+status+'" data-status="'+status+'" data-idx="'+idx+'">'+wrappedHtml+'</a>';
+
+                    return match.replace(captureHtml, wrappedHtml);
                 });
 
             });

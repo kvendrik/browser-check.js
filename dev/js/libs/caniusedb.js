@@ -440,7 +440,7 @@ var featuresJSON = [{
   "description":"High-level JavaScript API for processing and synthesizing audio",
   "spec":"http://www.w3.org/TR/webaudio/",
   "status":"wd",
-  "triggers": ["AudioContext", "webkitAudioContext"],
+  "triggers": ["new AudioContext", "new webkitAudioContext"],
   "links":[
     {
       "url":"https://github.com/corbanbrook/audionode.js",
@@ -4213,7 +4213,7 @@ var featuresJSON = [{
   "description":"Method of reading the contents of a File or Blob object into memory",
   "spec":"http://www.w3.org/TR/FileAPI/#dfn-filereader",
   "status":"wd",
-  "triggers": ["FileReader"],
+  "triggers": ["new FileReader"],
   "links":[
     {
       "url":"https://developer.mozilla.org/en/DOM/FileReader",
