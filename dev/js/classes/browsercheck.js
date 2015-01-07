@@ -29,7 +29,7 @@ Browsercheck.prototype.check = function(jsCode){
             details.foundTrigger = trigger;
 
             if(support.success === false){
-               details.explaination = details.title+' is not supported in '+support.details.browser.name+' v'+support.details.browser.version;
+               details.explaination = details.title+' is not supported in '+support.details.browser.name+' '+support.details.browser.version;
                details.status = 'failed';
                results.failed.push(details);
             } else if(support.success) {

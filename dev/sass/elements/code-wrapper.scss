@@ -8,6 +8,12 @@
 
     position: relative;
 
+    .check-trigger {
+        position: absolute;
+        top: 0;
+        right: $margin-l;
+    }
+
     .container {
         width: $wide-container-width;
 
@@ -20,14 +26,18 @@
             &.failed,&.failed:hover {
                 color: $red;
                 border-color: $red;
-            }
-            &.warning,&.warning:hover {
-                color: $yellow;
-                border-color: $yellow;
+
+                &.is-active {
+                    background-color: lighten($red, 40%);
+                }
             }
             &.passed,&.passed:hover {
                 color: $green;
                 border-color: $green;
+
+                &.is-active {
+                    background-color: lighten($green, 40%);
+                }
             }
         }
     }

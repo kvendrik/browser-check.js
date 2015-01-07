@@ -59,7 +59,7 @@
     }
 
     .minify-trigger {
-        background-color: $grey-light;
+        background-color: transparent;
         float: left;
         @include transition(transform);
     }

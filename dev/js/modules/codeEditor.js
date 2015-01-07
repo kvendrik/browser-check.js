@@ -9,6 +9,12 @@ var codeEditor = (function(B){
         this.Browsercheck = Browsercheck;
         this.tooltip = tooltip;
         this.resultsUp = resultsUp;
+
+        var self = this;
+        B(_gebi('check-trigger')).click(function(e){
+            e.preventDefault();
+            self.browserCheckCode();
+        });
     };
 
     codeEditor.browserCheckCode = function(){
@@ -52,6 +58,13 @@ var codeEditor = (function(B){
 
     codeEditor.openTooltipByAnchor = function(anchorEl){
         var featureDetails = this.browserCheckResults[anchorEl.getAttribute('data-status')][anchorEl.getAttribute('data-idx')];
+
+        B(anchorEl).addClass('is-active');
+        if(self.prevAnchorEl){
+            B(self.prevAnchorEl).removeClass('is-active');
+        }
+        self.prevAnchorEl = anchorEl;
+
         this.tooltip.tooltipChangeState({
             action: 'show',
             featureDetails: featureDetails,

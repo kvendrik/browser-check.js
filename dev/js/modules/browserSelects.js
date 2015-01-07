@@ -21,7 +21,7 @@ var browserSelects = (function(B){
         var frag = document.createDocumentFragment();
 
         //loop browsers, construct select
-        B.forEach(this.checkVersions[0], function(defaultVersion, browserName){
+        B.forEach(this.checkVersions, function(defaultVersion, browserName){
             var el = browserSelects.constructSelect(defaultVersion, browserName, browsersJson);
             frag.appendChild(el);
         });
@@ -41,7 +41,7 @@ var browserSelects = (function(B){
 
             B.forEach(options, function(option){
                 if(option.selected){
-                    self.checkVersions.set(option.getAttribute('data-browser-name'), Number(option.getAttribute('data-browser-version')));
+                    self.checkVersions[option.getAttribute('data-browser-name')] = Number(option.getAttribute('data-browser-version'));
                 }
             });
         };

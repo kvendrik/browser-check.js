@@ -53,6 +53,22 @@ a {
         color: $accent;
         border-color: $accent;
     }
+
+    &.btn {
+        display: inline-block;
+
+        font-size: $size-s;
+        padding: $padding-s;
+        background-color: $base-color;
+        color: $white;
+        border: none;
+
+        @include transition(background-color);
+
+        &:hover {
+            background-color: $accent;
+        }
+    }
 }
 
 select {

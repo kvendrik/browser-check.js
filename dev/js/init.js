@@ -6,7 +6,7 @@ function _gebi(id){
 	'use strict';
 
 	//versions to check if support is higher than
-	var checkVersions = new Observer({
+	var checkVersions = {
 		ie: 10,
 		chrome: 16,
 		firefox: 22,
@@ -14,26 +14,20 @@ function _gebi(id){
 		opera: 18,
 		ios_saf: 8,
 		android: 4.1
-	});
+	};
 
-	var Browserchecker = new Browsercheck(featuresJSON, checkVersions[0]);
-
-	//listen for checkVersions changes
-	checkVersions.on('change', function(details){
-		codeEditor.browserCheckCode();
-	});
+	var Browserchecker = new Browsercheck(featuresJSON, checkVersions);
 
 	//init browser selects
 	browserSelects.init(featuresJSON, checkVersions);
 
 	//tooltip
-	tooltip.init(checkVersions[0], resultsUp);
+	tooltip.init(checkVersions, resultsUp);
 
 	//init resultsup
 	resultsUp.init(codeEditor, tooltip);
 
 	//browser check code on load
-	codeEditor.init(checkVersions[0], Browserchecker, tooltip, resultsUp);
-	codeEditor.browserCheckCode();
+	codeEditor.init(checkVersions, Browserchecker, tooltip, resultsUp);
 
 }());
